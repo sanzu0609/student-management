@@ -6,7 +6,7 @@ Thiết lập kết nối tới H2 database (in-memory) và định nghĩa đố
 ---
 
 ## ✅ Acceptance Criteria
-- [ ] Thêm dependencies `spring-boot-starter-data-jpa` và `h2database` vào file `pom.xml`.  
+- [x] Thêm dependencies `spring-boot-starter-data-jpa` và `h2database` vào file `pom.xml`.  
 - [ ] Cấu hình thông tin kết nối H2 database và JPA trong file `application.properties`.  
 - [ ] Tạo package `com.example.studentmanagement.model`.  
 - [ ] Tạo class `Student.java` trong package trên và đánh dấu là JPA entity.  
@@ -22,7 +22,7 @@ Thiết lập kết nối tới H2 database (in-memory) và định nghĩa đố
 ## 📂 Tasks
 
 ### Task 1: Cập nhật `pom.xml`
-- [ ] Thêm các dependencies cần thiết cho JPA và H2.
+- [x] Thêm các dependencies cần thiết cho JPA và H2.
 
 ### Task 2: Cấu hình `application.properties`
 - [ ] Thêm cấu hình kết nối H2 database.  
