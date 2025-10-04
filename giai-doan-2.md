@@ -40,6 +40,6 @@ Tạo tầng Repository để tương tác với database và tầng Service đ�
 ---
 
 ## 🏷️ Giai đoạn 2 | Độ khó: Beginner
-- [ ] Sau khi hoàn thành, có thể test nhanh bằng cách viết Controller hoặc Unit Test để gọi các hàm trong `StudentService`.
+- [x] Sau khi hoàn thành, có thể test nhanh bằng cách viết Controller hoặc Unit Test để gọi các hàm trong `StudentService`.
 
 
