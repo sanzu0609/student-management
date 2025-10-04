@@ -9,13 +9,13 @@ Thiết lập kết nối tới H2 database (in-memory) và định nghĩa đố
 - [x] Thêm dependencies `spring-boot-starter-data-jpa` và `h2database` vào file `pom.xml`.  
 - [x] Cấu hình thông tin kết nối H2 database và JPA trong file `application.properties`.  
 - [x] Tạo package `com.example.studentmanagement.model`.  
-- [ ] Tạo class `Student.java` trong package trên và đánh dấu là JPA entity.  
-- [ ] Class `Student` có các thuộc tính:  
-  - [ ] `id`: Long, khóa chính, tự động tăng.  
-  - [ ] `firstName`: String.  
-  - [ ] `lastName`: String.  
-  - [ ] `email`: String, duy nhất.  
-  - [ ] `dateOfBirth`: LocalDate.  
+- [x] Tạo class `Student.java` trong package trên và đánh dấu là JPA entity.  
+- [x] Class `Student` có các thuộc tính:  
+  - [x] `id`: Long, khóa chính, tự động tăng.  
+  - [x] `firstName`: String.  
+  - [x] `lastName`: String.  
+  - [x] `email`: String, duy nhất.  
+  - [x] `dateOfBirth`: LocalDate.  
 
 ---
 
@@ -33,9 +33,9 @@ Thiết lập kết nối tới H2 database (in-memory) và định nghĩa đố
 - [x] Trong `src/main/java/com/example/studentmanagement`, tạo package mới tên là `model`.
 
 ### Task 4: Tạo class `Student.java`
-- [ ] Định nghĩa class `Student` với các thuộc tính: `id`, `firstName`, `lastName`, `email`, `dateOfBirth`.  
-- [ ] Đánh dấu class là `@Entity`.  
-- [ ] Đảm bảo `email` là duy nhất, `id` là khóa chính tự động tăng.
+- [x] Định nghĩa class `Student` với các thuộc tính: `id`, `firstName`, `lastName`, `email`, `dateOfBirth`.  
+- [x] Đánh dấu class là `@Entity`.  
+- [x] Đảm bảo `email` là duy nhất, `id` là khóa chính tự động tăng.
 
 ---
 
