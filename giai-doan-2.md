@@ -9,12 +9,12 @@ Tạo tầng Repository để tương tác với database và tầng Service đ�
 - [x] Tạo interface `StudentRepository` kế thừa `JpaRepository`.  
 - [x] Tạo class `StudentService` để chứa các phương thức xử lý logic.  
 - [x] `StudentService` sử dụng `StudentRepository` thông qua Dependency Injection (`@Autowired`).  
-- [ ] `StudentService` có các phương thức cơ bản:  
-  - [ ] `getAllStudents()`  
-  - [ ] `getStudentById(Long id)`  
-  - [ ] `createStudent(Student student)`  
-  - [ ] `updateStudent(Long id, Student studentDetails)`  
-  - [ ] `deleteStudent(Long id)`  
+- [x] `StudentService` có các phương thức cơ bản:  
+  - [x] `getAllStudents()`  
+  - [x] `getStudentById(Long id)`  
+  - [x] `createStudent(Student student)`  
+  - [x] `updateStudent(Long id, Student studentDetails)`  
+  - [x] `deleteStudent(Long id)`  
 
 ---
 
@@ -31,11 +31,11 @@ Tạo tầng Repository để tương tác với database và tầng Service đ�
 - [x] Sử dụng Dependency Injection để gọi `StudentRepository`.  
 
 ### Task 3: Định nghĩa các phương thức trong `StudentService`
-- [ ] `getAllStudents()` → Trả về danh sách tất cả sinh viên.  
-- [ ] `getStudentById(Long id)` → Lấy thông tin 1 sinh viên theo ID.  
-- [ ] `createStudent(Student student)` → Thêm mới sinh viên.  
-- [ ] `updateStudent(Long id, Student studentDetails)` → Cập nhật thông tin sinh viên theo ID.  
-- [ ] `deleteStudent(Long id)` → Xóa sinh viên theo ID.  
+- [x] `getAllStudents()` → Trả về danh sách tất cả sinh viên.  
+- [x] `getStudentById(Long id)` → Lấy thông tin 1 sinh viên theo ID.  
+- [x] `createStudent(Student student)` → Thêm mới sinh viên.  
+- [x] `updateStudent(Long id, Student studentDetails)` → Cập nhật thông tin sinh viên theo ID.  
+- [x] `deleteStudent(Long id)` → Xóa sinh viên theo ID.  
 
 ---
 
