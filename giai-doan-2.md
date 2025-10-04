@@ -7,8 +7,8 @@ Tạo tầng Repository để tương tác với database và tầng Service đ�
 
 ## ✅ Acceptance Criteria
 - [x] Tạo interface `StudentRepository` kế thừa `JpaRepository`.  
-- [ ] Tạo class `StudentService` để chứa các phương thức xử lý logic.  
-- [ ] `StudentService` sử dụng `StudentRepository` thông qua Dependency Injection (`@Autowired`).  
+- [x] Tạo class `StudentService` để chứa các phương thức xử lý logic.  
+- [x] `StudentService` sử dụng `StudentRepository` thông qua Dependency Injection (`@Autowired`).  
 - [ ] `StudentService` có các phương thức cơ bản:  
   - [ ] `getAllStudents()`  
   - [ ] `getStudentById(Long id)`  
@@ -26,9 +26,9 @@ Tạo tầng Repository để tương tác với database và tầng Service đ�
 - [x] Kế thừa `JpaRepository<Student, Long>` để có sẵn các hàm CRUD.
 
 ### Task 2: Tạo `StudentService`
-- [ ] Trong package `service`, tạo class `StudentService`.  
-- [ ] Đánh dấu bằng `@Service`.  
-- [ ] Sử dụng Dependency Injection để gọi `StudentRepository`.  
+- [x] Trong package `service`, tạo class `StudentService`.  
+- [x] Đánh dấu bằng `@Service`.  
+- [x] Sử dụng Dependency Injection để gọi `StudentRepository`.  
 
 ### Task 3: Định nghĩa các phương thức trong `StudentService`
 - [ ] `getAllStudents()` → Trả về danh sách tất cả sinh viên.  
