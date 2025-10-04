@@ -1,4 +1,4 @@
-# 📌 Giai đoạn 1: Kết nối Database H2 & Định nghĩa Entity Student
+﻿# 📌 Giai đoạn 1: Kết nối Database H2 & Định nghĩa Entity Student
 
 ## 🎯 Mục tiêu
 Thiết lập kết nối tới H2 database (in-memory) và định nghĩa đối tượng `Student` dưới dạng JPA Entity để lưu trữ thông tin sinh viên.
@@ -8,7 +8,7 @@ Thiết lập kết nối tới H2 database (in-memory) và định nghĩa đố
 ## ✅ Acceptance Criteria
 - [x] Thêm dependencies `spring-boot-starter-data-jpa` và `h2database` vào file `pom.xml`.  
 - [x] Cấu hình thông tin kết nối H2 database và JPA trong file `application.properties`.  
-- [ ] Tạo package `com.example.studentmanagement.model`.  
+- [x] Tạo package `com.example.studentmanagement.model`.  
 - [ ] Tạo class `Student.java` trong package trên và đánh dấu là JPA entity.  
 - [ ] Class `Student` có các thuộc tính:  
   - [ ] `id`: Long, khóa chính, tự động tăng.  
@@ -30,7 +30,7 @@ Thiết lập kết nối tới H2 database (in-memory) và định nghĩa đố
 - [x] Cấu hình JPA để tự động tạo bảng.
 
 ### Task 3: Tạo package `model`
-- [ ] Trong `src/main/java/com/example/studentmanagement`, tạo package mới tên là `model`.
+- [x] Trong `src/main/java/com/example/studentmanagement`, tạo package mới tên là `model`.
 
 ### Task 4: Tạo class `Student.java`
 - [ ] Định nghĩa class `Student` với các thuộc tính: `id`, `firstName`, `lastName`, `email`, `dateOfBirth`.  
@@ -41,3 +41,4 @@ Thiết lập kết nối tới H2 database (in-memory) và định nghĩa đố
 
 ## 🏷️ Giai đoạn 1 | Độ khó: Beginner
 - [ ] Sau khi hoàn thành, chạy ứng dụng và truy cập H2 Console tại đường dẫn `/h2-console` để kiểm tra dữ liệu.
+
