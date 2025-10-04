@@ -40,5 +40,5 @@ Thiết lập kết nối tới H2 database (in-memory) và định nghĩa đố
 ---
 
 ## 🏷️ Giai đoạn 1 | Độ khó: Beginner
-- [ ] Sau khi hoàn thành, chạy ứng dụng và truy cập H2 Console tại đường dẫn `/h2-console` để kiểm tra dữ liệu.
+- [x] Sau khi hoàn thành, chạy ứng dụng và truy cập H2 Console tại đường dẫn `/h2-console` để kiểm tra dữ liệu.
 
