@@ -31,8 +31,8 @@ Xây dựng các RESTful endpoints để client có thể tương tác với d�
 - [x] `DELETE` (remove): sử dụng `@DeleteMapping("/{id}")`.
 
 ### Task 3: Kết nối Service
-- [ ] Inject `StudentService` (Constructor Injection khuyến nghị).  
-- [ ] Ánh xạ dữ liệu request/response theo model đã định nghĩa.  
+- [x] Inject `StudentService` (Constructor Injection khuyến nghị).  
+- [x] Ánh xạ dữ liệu request/response theo model đã định nghĩa.  
 
 ### Task 4: Xử lý phản hồi & lỗi
 - [ ] Trả mã trạng thái phù hợp: `200 OK`, `201 Created`, `204 No Content`, `404 Not Found`, `400 Bad Request`.  
