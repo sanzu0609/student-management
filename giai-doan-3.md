@@ -35,8 +35,8 @@ Xây dựng các RESTful endpoints để client có thể tương tác với d�
 - [x] Ánh xạ dữ liệu request/response theo model đã định nghĩa.  
 
 ### Task 4: Xử lý phản hồi & lỗi
-- [ ] Trả mã trạng thái phù hợp: `200 OK`, `201 Created`, `204 No Content`, `404 Not Found`, `400 Bad Request`.  
-- [ ] Xử lý các trường hợp không tìm thấy ID và validate dữ liệu đầu vào.  
+- [x] Trả mã trạng thái phù hợp: `200 OK`, `201 Created`, `204 No Content`, `404 Not Found`, `400 Bad Request`.  
+- [x] Xử lý các trường hợp không tìm thấy ID và validate dữ liệu đầu vào.  
 
 ### Task 5: Kiểm thử API
 - [ ] Tạo collection Postman (hoặc sử dụng cURL/HTTP client tương đương).  
