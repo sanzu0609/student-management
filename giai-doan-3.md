@@ -39,18 +39,18 @@ Xây dựng các RESTful endpoints để client có thể tương tác với d�
 - [x] Xử lý các trường hợp không tìm thấy ID và validate dữ liệu đầu vào.  
 
 ### Task 5: Kiểm thử API
-- [ ] Tạo collection Postman (hoặc sử dụng cURL/HTTP client tương đương).  
-- [ ] Kiểm thử toàn bộ endpoints với các case: tạo mới, lấy chi tiết, cập nhật, xóa, lỗi không tìm thấy.  
-- [ ] Lưu lại minh chứng (ảnh chụp hoặc export collection).
+- [x] Tạo collection Postman (hoặc sử dụng cURL/HTTP client tương đương).  
+- [x] Kiểm thử toàn bộ endpoints với các case: tạo mới, lấy chi tiết, cập nhật, xóa, lỗi không tìm thấy.  
+- [x] Lưu lại minh chứng (ảnh chụp hoặc export collection).
 
 ---
 
 ## 🧪 Tiêu chí kiểm thử gợi ý
-- [ ] `POST` trả về `201 Created` và body chứa thông tin sinh viên mới.  
-- [ ] `GET` danh sách trả về mảng có độ dài ≥ 0.  
-- [ ] `GET {id}` trả về `200 OK` với đúng bản ghi; trả `404` nếu ID không tồn tại.  
-- [ ] `PUT {id}` cập nhật trường dữ liệu mong muốn; trả `404` nếu ID không tồn tại.  
-- [ ] `DELETE {id}` trả về `204 No Content`; gọi lại `GET {id}` phải trả `404`.
+- [x] `POST` trả về `201 Created` và body chứa thông tin sinh viên mới.  
+- [x] `GET` danh sách trả về mảng có độ dài ≥ 0.  
+- [x] `GET {id}` trả về `200 OK` với đúng bản ghi; trả `404` nếu ID không tồn tại.  
+- [x] `PUT {id}` cập nhật trường dữ liệu mong muốn; trả `404` nếu ID không tồn tại.  
+- [x] `DELETE {id}` trả về `204 No Content`; gọi lại `GET {id}` phải trả `404`.
 
 ---
 
