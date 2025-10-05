@@ -20,15 +20,15 @@ Xây dựng các RESTful endpoints để client có thể tương tác với d�
 ## 📂 Tasks
 
 ### Task 1: Khởi tạo Controller
-- [ ] Tạo class `StudentController` trong package `controller` (hoặc cấu trúc tương đương).  
-- [ ] Đánh dấu bằng `@RestController` và cấu hình base path bằng `@RequestMapping("/api/v1/students")`.
+- [x] Tạo class `StudentController` trong package `controller` (hoặc cấu trúc tương đương).  
+- [x] Đánh dấu bằng `@RestController` và cấu hình base path bằng `@RequestMapping("/api/v1/students")`.
 
 ### Task 2: Định nghĩa Endpoints
-- [ ] `GET` (list): sử dụng `@GetMapping` để trả về danh sách sinh viên.  
-- [ ] `GET` (detail): sử dụng `@GetMapping("/{id}")` với `@PathVariable Long id`.  
-- [ ] `POST` (create): sử dụng `@PostMapping`, nhận dữ liệu bằng `@RequestBody`.  
-- [ ] `PUT` (update): sử dụng `@PutMapping("/{id}")`, nhận `id` và `@RequestBody`.  
-- [ ] `DELETE` (remove): sử dụng `@DeleteMapping("/{id}")`.
+- [x] `GET` (list): sử dụng `@GetMapping` để trả về danh sách sinh viên.  
+- [x] `GET` (detail): sử dụng `@GetMapping("/{id}")` với `@PathVariable Long id`.  
+- [x] `POST` (create): sử dụng `@PostMapping`, nhận dữ liệu bằng `@RequestBody`.  
+- [x] `PUT` (update): sử dụng `@PutMapping("/{id}")`, nhận `id` và `@RequestBody`.  
+- [x] `DELETE` (remove): sử dụng `@DeleteMapping("/{id}")`.
 
 ### Task 3: Kết nối Service
 - [ ] Inject `StudentService` (Constructor Injection khuyến nghị).  
