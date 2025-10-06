@@ -9,7 +9,7 @@
 - [x] Thêm dependency `spring-boot-starter-validation` vào `pom.xml`.  
 - [x] Áp dụng **validation annotations** lên các thuộc tính của `Student` (ví dụ: `@NotBlank`, `@Email`, `@Past`).  
 - [x] Kích hoạt validation trong `StudentController` cho các endpoint `POST` và `PUT`.  
-- [ ] Khi dữ liệu không hợp lệ, API **trả 400 Bad Request** kèm thông tin lỗi dễ hiểu.  
+- [x] Khi dữ liệu không hợp lệ, API **trả 400 Bad Request** kèm thông tin lỗi dễ hiểu.  
 
 ---
 
@@ -30,9 +30,9 @@
 - [x] Tiếp nhận kết quả kiểm tra qua `BindingResult` (nếu sử dụng) hoặc cơ chế xử lý lỗi chuẩn của Spring.  
 
 ### Task 4: Chuẩn hóa phản hồi lỗi
-- [ ] Thiết kế **thông điệp lỗi** rõ ràng, gồm: field, message, rejectedValue (nếu cần).  
-- [ ] Đảm bảo HTTP status là **400** khi dữ liệu không hợp lệ.  
-- [ ] (Tùy chọn) Xây dựng cấu trúc error response thống nhất (code, message, errors[]).  
+- [x] Thiết kế **thông điệp lỗi** rõ ràng, gồm: field, message, rejectedValue (nếu cần).  
+- [x] Đảm bảo HTTP status là **400** khi dữ liệu không hợp lệ.  
+- [x] (Tùy chọn) Xây dựng cấu trúc error response thống nhất (code, message, errors[]).  
 
 ### Task 5: Kiểm thử Validation
 - [ ] Thử `POST/PUT` với dữ liệu thiếu/không hợp lệ (vd: email sai định dạng, firstName rỗng, dateOfBirth tương lai).  

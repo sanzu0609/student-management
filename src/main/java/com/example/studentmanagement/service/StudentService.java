@@ -58,22 +58,31 @@ public class StudentService {
 
     private void validateStudent(Student student) {
         if (student == null) {
-            throw new InvalidStudentDataException("Student payload must not be null.");
+            throw new InvalidStudentDataException("student", null, "Student payload must not be null.");
         }
-        if (!StringUtils.hasText(student.getFirstName())) {
-            throw new InvalidStudentDataException("First name is required.");
+
+        String firstName = student.getFirstName();
+        if (!StringUtils.hasText(firstName)) {
+            throw new InvalidStudentDataException("firstName", firstName, "First name is required.");
         }
-        if (!StringUtils.hasText(student.getLastName())) {
-            throw new InvalidStudentDataException("Last name is required.");
+
+        String lastName = student.getLastName();
+        if (!StringUtils.hasText(lastName)) {
+            throw new InvalidStudentDataException("lastName", lastName, "Last name is required.");
         }
-        if (!StringUtils.hasText(student.getEmail())) {
-            throw new InvalidStudentDataException("Email is required.");
+
+        String email = student.getEmail();
+        if (!StringUtils.hasText(email)) {
+            throw new InvalidStudentDataException("email", email, "Email is required.");
         }
-        if (!EMAIL_PATTERN.matcher(student.getEmail().trim()).matches()) {
-            throw new InvalidStudentDataException("Email format is invalid.");
+
+        String trimmedEmail = email.trim();
+        if (!EMAIL_PATTERN.matcher(trimmedEmail).matches()) {
+            throw new InvalidStudentDataException("email", trimmedEmail, "Email format is invalid.");
         }
+
         if (student.getDateOfBirth() == null) {
-            throw new InvalidStudentDataException("Date of birth is required.");
+            throw new InvalidStudentDataException("dateOfBirth", null, "Date of birth is required.");
         }
     }
 
