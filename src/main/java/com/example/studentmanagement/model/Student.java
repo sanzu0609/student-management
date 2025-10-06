@@ -8,6 +8,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDate;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(
@@ -20,15 +25,24 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Size(max = 100)
     @Column(nullable = false, length = 100)
     private String firstName;
 
+    @NotBlank
+    @Size(max = 100)
     @Column(nullable = false, length = 100)
     private String lastName;
 
+    @NotBlank
+    @Email
+    @Size(max = 150)
     @Column(nullable = false, unique = true, length = 150)
     private String email;
 
+    @NotNull
+    @Past
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
