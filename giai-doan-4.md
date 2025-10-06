@@ -7,7 +7,7 @@
 
 ## ✅ Acceptance Criteria
 - [x] Thêm dependency `spring-boot-starter-validation` vào `pom.xml`.  
-- [ ] Áp dụng **validation annotations** lên các thuộc tính của `Student` (ví dụ: `@NotBlank`, `@Email`, `@Past`).  
+- [x] Áp dụng **validation annotations** lên các thuộc tính của `Student` (ví dụ: `@NotBlank`, `@Email`, `@Past`).  
 - [ ] Kích hoạt validation trong `StudentController` cho các endpoint `POST` và `PUT`.  
 - [ ] Khi dữ liệu không hợp lệ, API **trả 400 Bad Request** kèm thông tin lỗi dễ hiểu.  
 
@@ -19,11 +19,11 @@
 - [x] Cập nhật `pom.xml` để có `spring-boot-starter-validation`.
 
 ### Task 2: Khai báo ràng buộc trên model
-- [ ] Xác định các ràng buộc tối thiểu cho `Student`:  
-  - [ ] `firstName`: không để trống.  
-  - [ ] `lastName`: không để trống.  
-  - [ ] `email`: đúng định dạng, duy nhất.  
-  - [ ] `dateOfBirth`: là ngày trong quá khứ (không phải tương lai).  
+- [x] Xác định các ràng buộc tối thiểu cho `Student`:  
+  - [x] `firstName`: không để trống.  
+  - [x] `lastName`: không để trống.  
+  - [x] `email`: đúng định dạng, duy nhất.  
+  - [x] `dateOfBirth`: là ngày trong quá khứ (không phải tương lai).  
 
 ### Task 3: Kích hoạt validation ở Controller
 - [ ] Thêm `@Valid` vào tham số request của các method `POST` và `PUT`.  
