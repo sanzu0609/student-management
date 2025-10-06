@@ -8,7 +8,7 @@
 ## ✅ Acceptance Criteria
 - [x] Thêm dependency `spring-boot-starter-validation` vào `pom.xml`.  
 - [x] Áp dụng **validation annotations** lên các thuộc tính của `Student` (ví dụ: `@NotBlank`, `@Email`, `@Past`).  
-- [ ] Kích hoạt validation trong `StudentController` cho các endpoint `POST` và `PUT`.  
+- [x] Kích hoạt validation trong `StudentController` cho các endpoint `POST` và `PUT`.  
 - [ ] Khi dữ liệu không hợp lệ, API **trả 400 Bad Request** kèm thông tin lỗi dễ hiểu.  
 
 ---
@@ -26,8 +26,8 @@
   - [x] `dateOfBirth`: là ngày trong quá khứ (không phải tương lai).  
 
 ### Task 3: Kích hoạt validation ở Controller
-- [ ] Thêm `@Valid` vào tham số request của các method `POST` và `PUT`.  
-- [ ] Tiếp nhận kết quả kiểm tra qua `BindingResult` (nếu sử dụng) hoặc cơ chế xử lý lỗi chuẩn của Spring.  
+- [x] Thêm `@Valid` vào tham số request của các method `POST` và `PUT`.  
+- [x] Tiếp nhận kết quả kiểm tra qua `BindingResult` (nếu sử dụng) hoặc cơ chế xử lý lỗi chuẩn của Spring.  
 
 ### Task 4: Chuẩn hóa phản hồi lỗi
 - [ ] Thiết kế **thông điệp lỗi** rõ ràng, gồm: field, message, rejectedValue (nếu cần).  
