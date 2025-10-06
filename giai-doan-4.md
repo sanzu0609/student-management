@@ -35,22 +35,22 @@
 - [x] (Tùy chọn) Xây dựng cấu trúc error response thống nhất (code, message, errors[]).  
 
 ### Task 5: Kiểm thử Validation
-- [ ] Thử `POST/PUT` với dữ liệu thiếu/không hợp lệ (vd: email sai định dạng, firstName rỗng, dateOfBirth tương lai).  
-- [ ] Xác nhận API trả **400** và thông báo lỗi **đúng field**, **đúng thông điệp**.  
-- [ ] Ghi lại các case test trong Postman collection (hoặc tài liệu kèm theo).
+- [x] Thử `POST/PUT` với dữ liệu thiếu/không hợp lệ (vd: email sai định dạng, firstName rỗng, dateOfBirth tương lai).  
+- [x] Xác nhận API trả **400** và thông báo lỗi **đúng field**, **đúng thông điệp**.  
+- [x] Ghi lại các case test trong Postman collection (hoặc tài liệu kèm theo).
 
 ---
 
 ## 🧪 Checklist test gợi ý
-- [ ] `POST /api/v1/students` với `email = "abc"` → 400 + thông điệp lỗi về email.  
-- [ ] `POST` với `firstName = ""` hoặc chỉ khoảng trắng → 400 + lỗi `NotBlank`.  
-- [ ] `PUT {id}` với `dateOfBirth` là ngày tương lai → 400 + lỗi `@Past`.  
-- [ ] `PUT {id}` với payload hợp lệ → 200/204 và bản ghi được cập nhật.  
+- [x] `POST /api/v1/students` với `email = "abc"` → 400 + thông điệp lỗi về email.  
+- [x] `POST` với `firstName = ""` hoặc chỉ khoảng trắng → 400 + lỗi `NotBlank`.  
+- [x] `PUT {id}` với `dateOfBirth` là ngày tương lai → 400 + lỗi `@Past`.  
+- [x] `PUT {id}` với payload hợp lệ → 200/204 và bản ghi được cập nhật.  
 
 ---
 
 ## 📝 Lưu ý triển khai
-- [ ] Dùng annotation validation từ **Jakarta Validation** (ví dụ `jakarta.validation.constraints.*`).  
+- [x] Dùng annotation validation từ **Jakarta Validation** (ví dụ `jakarta.validation.constraints.*`).  
 - [ ] Đảm bảo **localization** thông điệp (nếu cần) qua `messages.properties` (tùy chọn).  
 - [ ] Với ràng buộc **email duy nhất**, cần kiểm tra ở Service/Repository và trả lỗi phù hợp (có thể 409 Conflict; hoặc 400 kèm thông điệp).  
 

@@ -1,5 +1,6 @@
 package com.example.studentmanagement.controller;
 
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -123,14 +124,14 @@ class StudentControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /students returns 400 for invalid payload")
+    @DisplayName("POST /students returns 400 with validation errors for invalid payload")
     void createStudent_returnsBadRequestForInvalidData() throws Exception {
         String requestBody = """
             {
-              \"firstName\": \"\",
-              \"lastName\": \"Doe\",
-              \"email\": \"not-an-email\",
-              \"dateOfBirth\": null
+              "firstName": "",
+              "lastName": "Doe",
+              "email": "not-an-email",
+              "dateOfBirth": null
             }
             """;
 
@@ -138,6 +139,38 @@ class StudentControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.error").exists());
+            .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+            .andExpect(jsonPath("$.errors[*].field", hasItem("firstName")))
+            .andExpect(jsonPath("$.errors[*].field", hasItem("email")))
+            .andExpect(jsonPath("$.errors[*].message", hasItem("must not be blank")));
+    }
+
+    @Test
+    @DisplayName("PUT /students returns 400 when date of birth is in the future")
+    void updateStudent_returnsBadRequestForFutureDate() throws Exception {
+        Student saved = studentRepository.save(new Student(
+            "Mai",
+            "Le",
+            "mai.le@example.com",
+            LocalDate.of(2001, 9, 5)
+        ));
+
+        String futureDate = LocalDate.now().plusDays(1).toString();
+        String updateBody = """
+            {
+              "firstName": "Mai",
+              "lastName": "Le",
+              "email": "mai.le@example.com",
+              "dateOfBirth": "%s"
+            }
+            """.formatted(futureDate);
+
+        mockMvc.perform(put("/api/v1/students/{id}", saved.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updateBody))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+            .andExpect(jsonPath("$.errors[*].field", hasItem("dateOfBirth")))
+            .andExpect(jsonPath("$.errors[*].message", hasItem("must be a past date")));
     }
 }
