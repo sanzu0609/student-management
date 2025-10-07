@@ -3,6 +3,7 @@ package com.example.studentmanagement.controller;
 import com.example.studentmanagement.controller.dto.PageResponse;
 import com.example.studentmanagement.model.Student;
 import com.example.studentmanagement.service.StudentService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/v1/students")
@@ -40,9 +42,10 @@ public class StudentController {
             size = DEFAULT_PAGE_SIZE,
             sort = "id",
             direction = Sort.Direction.ASC
-        ) Pageable pageable
+        ) Pageable pageable,
+        HttpServletRequest request
     ) {
-        Pageable sanitized = sanitizePageable(pageable);
+        Pageable sanitized = sanitizePageable(pageable, request);
         Page<Student> page = studentService.getStudents(sanitized);
         return PageResponse.from(page);
     }
@@ -74,13 +77,26 @@ public class StudentController {
         return ResponseEntity.noContent().build();
     }
 
-    private Pageable sanitizePageable(Pageable pageable) {
+    private Pageable sanitizePageable(Pageable pageable, HttpServletRequest request) {
         int page = Math.max(pageable.getPageNumber(), 0);
         int size = pageable.getPageSize();
 
+        String sizeParam = request.getParameter("size");
+        if (sizeParam != null) {
+            try {
+                int requestedSize = Integer.parseInt(sizeParam);
+                if (requestedSize < 1) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "error.page.size.negative");
+                }
+            } catch (NumberFormatException ex) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "error.page.size.invalid");
+            }
+        }
+
         if (size < 1) {
-            size = DEFAULT_PAGE_SIZE;
-        } else if (size > MAX_PAGE_SIZE) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "error.page.size.negative");
+        }
+        if (size > MAX_PAGE_SIZE) {
             size = MAX_PAGE_SIZE;
         }
 

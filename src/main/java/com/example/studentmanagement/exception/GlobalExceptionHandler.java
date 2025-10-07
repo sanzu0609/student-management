@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Locale;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -79,6 +81,37 @@ public class GlobalExceptionHandler {
         );
         ApiErrorResponse body = buildResponse(HttpStatus.NOT_FOUND, message, request.getRequestURI(), List.of());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ApiErrorResponse> handleResponseStatus(
+        ResponseStatusException ex,
+        HttpServletRequest request
+    ) {
+        Locale locale = LocaleContextHolder.getLocale();
+        String messageKey = ex.getReason();
+        String message = messageKey == null
+            ? ex.getStatusCode().toString()
+            : messageSource.getMessage(messageKey, null, messageKey, locale);
+
+        HttpStatus status = HttpStatus.valueOf(ex.getStatusCode().value());
+        ApiErrorResponse body = buildResponse(status, message, request.getRequestURI(), List.of());
+        return ResponseEntity.status(status).body(body);
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ApiErrorResponse> handlePropertyReference(
+        PropertyReferenceException ex,
+        HttpServletRequest request
+    ) {
+        Locale locale = LocaleContextHolder.getLocale();
+        String message = messageSource.getMessage(
+            "error.sort.invalid",
+            new Object[] {ex.getPropertyName()},
+            locale
+        );
+        ApiErrorResponse body = buildResponse(HttpStatus.BAD_REQUEST, message, request.getRequestURI(), List.of());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
     private ApiErrorResponse buildResponse(
