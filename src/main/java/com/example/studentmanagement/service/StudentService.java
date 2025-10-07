@@ -6,6 +6,8 @@ import com.example.studentmanagement.model.Student;
 import com.example.studentmanagement.repository.StudentRepository;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -22,6 +24,10 @@ public class StudentService {
 
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
+    }
+
+    public Page<Student> getStudents(Pageable pageable) {
+        return studentRepository.findAll(pageable);
     }
 
     public Student getStudentById(Long id) {

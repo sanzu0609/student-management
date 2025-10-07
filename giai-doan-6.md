@@ -27,8 +27,8 @@ Cải thiện `GET /api/v1/students` để hỗ trợ **phân trang** và **sắ
 - [x] Hỗ trợ **nhiều tiêu chí sort** (tùy chọn), ví dụ: `sort=lastName,asc&sort=firstName,asc`.
 
 ### Task 3: Chuẩn hoá response
-- [ ] Trả trực tiếp `Page<Student>` hoặc một DTO bao bọc (`content` + `pageInfo`).  
-- [ ] Đảm bảo các trường phân trang quan trọng có trong response để client hiển thị UI phân trang.
+- [x] Trả trực tiếp `Page<Student>` hoặc một DTO bao bọc (`content` + `pageInfo`).  
+- [x] Đảm bảo các trường phân trang quan trọng có trong response để client hiển thị UI phân trang.
 
 ### Task 4: Quy ước & giá trị mặc định
 - [ ] Thiết lập **mặc định** cho `page=0`, `size` hợp lý (ví dụ 10 hoặc 20), `sort` mặc định (ví dụ `id,asc`).  

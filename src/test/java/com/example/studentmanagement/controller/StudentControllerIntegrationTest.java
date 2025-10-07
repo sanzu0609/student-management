@@ -59,6 +59,49 @@ class StudentControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("GET /students returns paged payload with metadata")
+    void getStudents_returnsPagedResponse() throws Exception {
+        studentRepository.save(new Student(
+            "Cathy",
+            "Adams",
+            "cathy.adams@example.com",
+            LocalDate.of(1997, 4, 12)
+        ));
+        studentRepository.save(new Student(
+            "Brian",
+            "Doe",
+            "brian.doe@example.com",
+            LocalDate.of(1996, 6, 22)
+        ));
+        studentRepository.save(new Student(
+            "Anna",
+            "Smith",
+            "anna.smith@example.com",
+            LocalDate.of(1995, 2, 3)
+        ));
+
+        mockMvc.perform(get("/api/v1/students")
+                .param("page", "0")
+                .param("size", "2")
+                .param("sort", "lastName,asc")
+                .param("sort", "firstName,asc"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content", hasSize(2)))
+            .andExpect(jsonPath("$.content[0].lastName").value("Adams"))
+            .andExpect(jsonPath("$.content[1].lastName").value("Doe"))
+            .andExpect(jsonPath("$.page.number").value(0))
+            .andExpect(jsonPath("$.page.size").value(2))
+            .andExpect(jsonPath("$.page.totalElements").value(3))
+            .andExpect(jsonPath("$.page.totalPages").value(2))
+            .andExpect(jsonPath("$.page.first").value(true))
+            .andExpect(jsonPath("$.page.last").value(false))
+            .andExpect(jsonPath("$.page.numberOfElements").value(2))
+            .andExpect(jsonPath("$.page.sort", hasSize(2)))
+            .andExpect(jsonPath("$.page.sort[0].property").value("lastName"))
+            .andExpect(jsonPath("$.page.sort[0].direction").value("ASC"));
+    }
+
+    @Test
     @DisplayName("GET /students/{id} returns 200 when found")
     void getStudentById_returnsOk() throws Exception {
         Student saved = studentRepository.save(new Student(

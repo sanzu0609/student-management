@@ -1,5 +1,6 @@
 package com.example.studentmanagement.controller;
 
+import com.example.studentmanagement.controller.dto.PageResponse;
 import com.example.studentmanagement.model.Student;
 import com.example.studentmanagement.service.StudentService;
 import jakarta.validation.Valid;
@@ -27,8 +28,9 @@ public class StudentController {
     }
 
     @GetMapping
-    public Page<Student> getAllStudents(Pageable pageable) {
-        return studentService.getStudents(pageable);
+    public PageResponse<Student> getAllStudents(Pageable pageable) {
+        Page<Student> page = studentService.getStudents(pageable);
+        return PageResponse.from(page);
     }
 
     @GetMapping("/{id}")
