@@ -3,7 +3,8 @@ package com.example.studentmanagement.controller;
 import com.example.studentmanagement.model.Student;
 import com.example.studentmanagement.service.StudentService;
 import jakarta.validation.Valid;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,8 +27,8 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
+    public Page<Student> getAllStudents(Pageable pageable) {
+        return studentService.getStudents(pageable);
     }
 
     @GetMapping("/{id}")
