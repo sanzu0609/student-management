@@ -139,7 +139,10 @@ class StudentControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.error").value("Bad Request"))
+            .andExpect(jsonPath("$.message").value("Request validation failed."))
+            .andExpect(jsonPath("$.path").value("/api/v1/students"))
             .andExpect(jsonPath("$.errors[*].field", hasItem("firstName")))
             .andExpect(jsonPath("$.errors[*].field", hasItem("email")))
             .andExpect(jsonPath("$.errors[*].message", hasItem("must not be blank")));
@@ -169,7 +172,10 @@ class StudentControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updateBody))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.error").value("Bad Request"))
+            .andExpect(jsonPath("$.message").value("Request validation failed."))
+            .andExpect(jsonPath("$.path").value("/api/v1/students/" + saved.getId()))
             .andExpect(jsonPath("$.errors[*].field", hasItem("dateOfBirth")))
             .andExpect(jsonPath("$.errors[*].message", hasItem("must be a past date")));
     }

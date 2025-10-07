@@ -8,11 +8,11 @@ Thiết lập cơ chế xử lý lỗi tập trung (global) để **chuẩn hóa
 ## ✅ Acceptance Criteria
 - [x] Tạo **custom exception** `ResourceNotFoundException`.  
 - [x] Trong `StudentService`, **ném** `ResourceNotFoundException` khi không tìm thấy sinh viên theo ID.  
-- [ ] Tạo `GlobalExceptionHandler` và đánh dấu bằng `@ControllerAdvice`.  
-- [ ] Trong `GlobalExceptionHandler`, xử lý:  
-  - [ ] `ResourceNotFoundException` → trả **404 Not Found**.  
-  - [ ] `MethodArgumentNotValidException` (lỗi validation) → trả **400 Bad Request**.  
-- [ ] Response lỗi có **cấu trúc JSON thống nhất**, ví dụ:  
+- [x] Tạo `GlobalExceptionHandler` và đánh dấu bằng `@ControllerAdvice`.  
+- [x] Trong `GlobalExceptionHandler`, xử lý:  
+  - [x] `ResourceNotFoundException` → trả **404 Not Found**.  
+  - [x] `MethodArgumentNotValidException` (lỗi validation) → trả **400 Bad Request**.  
+- [x] Response lỗi có **cấu trúc JSON thống nhất**, ví dụ:  
   - `{"timestamp":"...","status":404,"error":"Not Found","message":"Student not found with id: 99"}`
 
 ---
@@ -28,10 +28,10 @@ Thiết lập cơ chế xử lý lỗi tập trung (global) để **chuẩn hóa
 - [x] Đảm bảo tất cả luồng đọc/cập nhật/xóa đều xử lý trường hợp không tìm thấy.  
 
 ### Task 3: Tạo Global Exception Handler
-- [ ] Tạo class `GlobalExceptionHandler` với `@ControllerAdvice`.  
-- [ ] Tạo method xử lý `ResourceNotFoundException` trả về **404**.  
-- [ ] Tạo method xử lý `MethodArgumentNotValidException` trả về **400**, tổng hợp lỗi field.  
-- [ ] Chuẩn hoá **cấu trúc lỗi JSON**: `timestamp`, `status`, `error`, `message`, (tùy chọn: `path`, `errors[]`).  
+- [x] Tạo class `GlobalExceptionHandler` với `@ControllerAdvice`.  
+- [x] Tạo method xử lý `ResourceNotFoundException` trả về **404**.  
+- [x] Tạo method xử lý `MethodArgumentNotValidException` trả về **400**, tổng hợp lỗi field.  
+- [x] Chuẩn hoá **cấu trúc lỗi JSON**: `timestamp`, `status`, `error`, `message`, (tùy chọn: `path`, `errors[]`).  
 
 ### Task 4: Đồng bộ thông điệp & i18n (tuỳ chọn)
 - [ ] Chuẩn hoá message tiếng Việt/Anh qua `messages.properties` (nếu cần).  

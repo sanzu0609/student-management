@@ -1,6 +1,5 @@
 package com.example.studentmanagement.controller;
 
-import com.example.studentmanagement.exception.ResourceNotFoundException;
 import com.example.studentmanagement.model.Student;
 import com.example.studentmanagement.service.StudentService;
 import jakarta.validation.Valid;
@@ -33,12 +32,8 @@ public class StudentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
-        try {
-            Student student = studentService.getStudentById(id);
-            return ResponseEntity.ok(student);
-        } catch (ResourceNotFoundException ex) {
-            return ResponseEntity.notFound().build();
-        }
+        Student student = studentService.getStudentById(id);
+        return ResponseEntity.ok(student);
     }
 
     @PostMapping
