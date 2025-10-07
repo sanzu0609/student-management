@@ -34,8 +34,8 @@ Thiết lập cơ chế xử lý lỗi tập trung (global) để **chuẩn hóa
 - [x] Chuẩn hoá **cấu trúc lỗi JSON**: `timestamp`, `status`, `error`, `message`, (tùy chọn: `path`, `errors[]`).  
 
 ### Task 4: Đồng bộ thông điệp & i18n (tuỳ chọn)
-- [ ] Chuẩn hoá message tiếng Việt/Anh qua `messages.properties` (nếu cần).  
-- [ ] Đảm bảo message gọn, dễ hiểu với người dùng cuối.  
+- [x] Chuẩn hoá message tiếng Việt/Anh qua `messages.properties` (nếu cần).  
+- [x] Đảm bảo message gọn, dễ hiểu với người dùng cuối.  
 
 ### Task 5: Kiểm thử
 - [ ] Gọi `GET /.../students/{id}` với ID không tồn tại → **404** và message đúng.  

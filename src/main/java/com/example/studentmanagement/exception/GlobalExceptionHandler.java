@@ -2,6 +2,9 @@ package com.example.studentmanagement.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Locale;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -11,6 +14,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    private final MessageSource messageSource;
+
+    public GlobalExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValid(
@@ -23,12 +32,13 @@ public class GlobalExceptionHandler {
             .map(this::toFieldValidationError)
             .toList();
 
-        ApiErrorResponse body = buildResponse(
-            HttpStatus.BAD_REQUEST,
-            "Request validation failed.",
-            request.getRequestURI(),
-            fieldErrors
+        String message = messageSource.getMessage(
+            "error.validation.generic",
+            null,
+            LocaleContextHolder.getLocale()
         );
+
+        ApiErrorResponse body = buildResponse(HttpStatus.BAD_REQUEST, message, request.getRequestURI(), fieldErrors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
@@ -38,18 +48,20 @@ public class GlobalExceptionHandler {
         InvalidStudentDataException ex,
         HttpServletRequest request
     ) {
+        Locale locale = LocaleContextHolder.getLocale();
+        String resolvedMessage = messageSource.getMessage(
+            ex.getMessageKey(),
+            ex.getMessageArgs(),
+            locale
+        );
+
         ApiErrorResponse.FieldValidationError error = new ApiErrorResponse.FieldValidationError(
             ex.getField(),
-            ex.getMessage(),
+            resolvedMessage,
             ex.getRejectedValue()
         );
 
-        ApiErrorResponse body = buildResponse(
-            HttpStatus.BAD_REQUEST,
-            ex.getMessage(),
-            request.getRequestURI(),
-            List.of(error)
-        );
+        ApiErrorResponse body = buildResponse(HttpStatus.BAD_REQUEST, resolvedMessage, request.getRequestURI(), List.of(error));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
@@ -59,12 +71,13 @@ public class GlobalExceptionHandler {
         ResourceNotFoundException ex,
         HttpServletRequest request
     ) {
-        ApiErrorResponse body = buildResponse(
-            HttpStatus.NOT_FOUND,
-            ex.getMessage(),
-            request.getRequestURI(),
-            List.of()
+        Locale locale = LocaleContextHolder.getLocale();
+        String message = messageSource.getMessage(
+            ex.getMessageKey(),
+            ex.getMessageArgs(),
+            locale
         );
+        ApiErrorResponse body = buildResponse(HttpStatus.NOT_FOUND, message, request.getRequestURI(), List.of());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 

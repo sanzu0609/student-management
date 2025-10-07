@@ -55,31 +55,31 @@ public class StudentService {
 
     private void validateStudent(Student student) {
         if (student == null) {
-            throw new InvalidStudentDataException("student", null, "Student payload must not be null.");
+            throw new InvalidStudentDataException("student", null, "error.student.payload-null");
         }
 
         String firstName = student.getFirstName();
         if (!StringUtils.hasText(firstName)) {
-            throw new InvalidStudentDataException("firstName", firstName, "First name is required.");
+            throw new InvalidStudentDataException("firstName", firstName, "error.student.first-name.required");
         }
 
         String lastName = student.getLastName();
         if (!StringUtils.hasText(lastName)) {
-            throw new InvalidStudentDataException("lastName", lastName, "Last name is required.");
+            throw new InvalidStudentDataException("lastName", lastName, "error.student.last-name.required");
         }
 
         String email = student.getEmail();
         if (!StringUtils.hasText(email)) {
-            throw new InvalidStudentDataException("email", email, "Email is required.");
+            throw new InvalidStudentDataException("email", email, "error.student.email.required");
         }
 
         String trimmedEmail = email.trim();
         if (!EMAIL_PATTERN.matcher(trimmedEmail).matches()) {
-            throw new InvalidStudentDataException("email", trimmedEmail, "Email format is invalid.");
+            throw new InvalidStudentDataException("email", trimmedEmail, "error.student.email.invalid");
         }
 
         if (student.getDateOfBirth() == null) {
-            throw new InvalidStudentDataException("dateOfBirth", null, "Date of birth is required.");
+            throw new InvalidStudentDataException("dateOfBirth", null, "error.student.date-of-birth.required");
         }
     }
 
