@@ -38,18 +38,18 @@ Thiết lập cơ chế xử lý lỗi tập trung (global) để **chuẩn hóa
 - [x] Đảm bảo message gọn, dễ hiểu với người dùng cuối.  
 
 ### Task 5: Kiểm thử
-- [ ] Gọi `GET /.../students/{id}` với ID không tồn tại → **404** và message đúng.  
-- [ ] Gọi `POST/PUT` với payload không hợp lệ → **400** và danh sách lỗi hợp lệ.  
-- [ ] Kiểm tra timestamp, status, error, message đúng format.  
-- [ ] Ghi lại case test trong Postman/cURL hoặc tài liệu kèm theo.  
+- [x] Gọi `GET /.../students/{id}` với ID không tồn tại → **404** và message đúng.  
+- [x] Gọi `POST/PUT` với payload không hợp lệ → **400** và danh sách lỗi hợp lệ.  
+- [x] Kiểm tra timestamp, status, error, message đúng format.  
+- [x] Ghi lại case test trong Postman/cURL hoặc tài liệu kèm theo.  
 
 ---
 
 ## 🧪 Checklist test gợi ý
-- [ ] **404**: `GET` sinh viên không tồn tại → status 404, `error="Not Found"`.  
-- [ ] **400**: `POST` với email sai định dạng → status 400, có danh sách field lỗi.  
-- [ ] **400**: `PUT` với `dateOfBirth` tương lai → status 400, thông điệp rõ ràng.  
-- [ ] **OK**: `POST` hợp lệ → không bị GlobalExceptionHandler bắt lỗi.  
+- [x] **404**: `GET` sinh viên không tồn tại → status 404, `error="Not Found"`.  
+- [x] **400**: `POST` với email sai định dạng → status 400, có danh sách field lỗi.  
+- [x] **400**: `PUT` với `dateOfBirth` tương lai → status 400, thông điệp rõ ràng.  
+- [x] **OK**: `POST` hợp lệ → không bị GlobalExceptionHandler bắt lỗi.  
 
 ---
 
