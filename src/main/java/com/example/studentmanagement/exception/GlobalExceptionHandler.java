@@ -1,6 +1,10 @@
 package com.example.studentmanagement.exception;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Locale;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -11,48 +15,86 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    private final MessageSource messageSource;
+
+    public GlobalExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValid(
+        MethodArgumentNotValidException ex,
+        HttpServletRequest request
+    ) {
         List<ApiErrorResponse.FieldValidationError> fieldErrors = ex.getBindingResult()
             .getFieldErrors()
             .stream()
             .map(this::toFieldValidationError)
             .toList();
 
-        ApiErrorResponse body = new ApiErrorResponse(
-            "VALIDATION_FAILED",
-            "Request validation failed.",
-            fieldErrors
+        String message = messageSource.getMessage(
+            "error.validation.generic",
+            null,
+            LocaleContextHolder.getLocale()
         );
+
+        ApiErrorResponse body = buildResponse(HttpStatus.BAD_REQUEST, message, request.getRequestURI(), fieldErrors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
     @ExceptionHandler(InvalidStudentDataException.class)
-    public ResponseEntity<ApiErrorResponse> handleInvalidStudentData(InvalidStudentDataException ex) {
+    public ResponseEntity<ApiErrorResponse> handleInvalidStudentData(
+        InvalidStudentDataException ex,
+        HttpServletRequest request
+    ) {
+        Locale locale = LocaleContextHolder.getLocale();
+        String resolvedMessage = messageSource.getMessage(
+            ex.getMessageKey(),
+            ex.getMessageArgs(),
+            locale
+        );
+
         ApiErrorResponse.FieldValidationError error = new ApiErrorResponse.FieldValidationError(
             ex.getField(),
-            ex.getMessage(),
+            resolvedMessage,
             ex.getRejectedValue()
         );
 
-        ApiErrorResponse body = new ApiErrorResponse(
-            "INVALID_STUDENT_DATA",
-            ex.getMessage(),
-            List.of(error)
-        );
+        ApiErrorResponse body = buildResponse(HttpStatus.BAD_REQUEST, resolvedMessage, request.getRequestURI(), List.of(error));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
-    @ExceptionHandler(StudentNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleStudentNotFound(StudentNotFoundException ex) {
-        ApiErrorResponse body = new ApiErrorResponse(
-            "STUDENT_NOT_FOUND",
-            ex.getMessage(),
-            List.of()
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleResourceNotFound(
+        ResourceNotFoundException ex,
+        HttpServletRequest request
+    ) {
+        Locale locale = LocaleContextHolder.getLocale();
+        String message = messageSource.getMessage(
+            ex.getMessageKey(),
+            ex.getMessageArgs(),
+            locale
         );
+        ApiErrorResponse body = buildResponse(HttpStatus.NOT_FOUND, message, request.getRequestURI(), List.of());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+    private ApiErrorResponse buildResponse(
+        HttpStatus status,
+        String message,
+        String path,
+        List<ApiErrorResponse.FieldValidationError> fieldErrors
+    ) {
+        return new ApiErrorResponse(
+            null,
+            status.value(),
+            status.getReasonPhrase(),
+            message,
+            path,
+            fieldErrors
+        );
     }
 
     private ApiErrorResponse.FieldValidationError toFieldValidationError(FieldError error) {

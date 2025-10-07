@@ -1,11 +1,10 @@
 package com.example.studentmanagement.service;
 
 import com.example.studentmanagement.exception.InvalidStudentDataException;
-import com.example.studentmanagement.exception.StudentNotFoundException;
+import com.example.studentmanagement.exception.ResourceNotFoundException;
 import com.example.studentmanagement.model.Student;
 import com.example.studentmanagement.repository.StudentRepository;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -25,8 +24,9 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public Optional<Student> getStudentById(Long id) {
-        return studentRepository.findById(id);
+    public Student getStudentById(Long id) {
+        return studentRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Student", "id", id));
     }
 
     public Student createStudent(Student student) {
@@ -36,8 +36,7 @@ public class StudentService {
     }
 
     public Student updateStudent(Long id, Student studentDetails) {
-        Student existing = studentRepository.findById(id)
-            .orElseThrow(() -> new StudentNotFoundException(id));
+        Student existing = getStudentById(id);
 
         validateStudent(studentDetails);
 
@@ -50,39 +49,37 @@ public class StudentService {
     }
 
     public void deleteStudent(Long id) {
-        if (!studentRepository.existsById(id)) {
-            throw new StudentNotFoundException(id);
-        }
-        studentRepository.deleteById(id);
+        Student existing = getStudentById(id);
+        studentRepository.deleteById(existing.getId());
     }
 
     private void validateStudent(Student student) {
         if (student == null) {
-            throw new InvalidStudentDataException("student", null, "Student payload must not be null.");
+            throw new InvalidStudentDataException("student", null, "error.student.payload-null");
         }
 
         String firstName = student.getFirstName();
         if (!StringUtils.hasText(firstName)) {
-            throw new InvalidStudentDataException("firstName", firstName, "First name is required.");
+            throw new InvalidStudentDataException("firstName", firstName, "error.student.first-name.required");
         }
 
         String lastName = student.getLastName();
         if (!StringUtils.hasText(lastName)) {
-            throw new InvalidStudentDataException("lastName", lastName, "Last name is required.");
+            throw new InvalidStudentDataException("lastName", lastName, "error.student.last-name.required");
         }
 
         String email = student.getEmail();
         if (!StringUtils.hasText(email)) {
-            throw new InvalidStudentDataException("email", email, "Email is required.");
+            throw new InvalidStudentDataException("email", email, "error.student.email.required");
         }
 
         String trimmedEmail = email.trim();
         if (!EMAIL_PATTERN.matcher(trimmedEmail).matches()) {
-            throw new InvalidStudentDataException("email", trimmedEmail, "Email format is invalid.");
+            throw new InvalidStudentDataException("email", trimmedEmail, "error.student.email.invalid");
         }
 
         if (student.getDateOfBirth() == null) {
-            throw new InvalidStudentDataException("dateOfBirth", null, "Date of birth is required.");
+            throw new InvalidStudentDataException("dateOfBirth", null, "error.student.date-of-birth.required");
         }
     }
 

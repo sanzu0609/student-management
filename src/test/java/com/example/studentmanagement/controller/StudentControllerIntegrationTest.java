@@ -1,6 +1,7 @@
 package com.example.studentmanagement.controller;
 
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -76,7 +77,13 @@ class StudentControllerIntegrationTest {
     @DisplayName("GET /students/{id} returns 404 when missing")
     void getStudentById_returnsNotFoundForMissing() throws Exception {
         mockMvc.perform(get("/api/v1/students/{id}", 9999L))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.status").value(404))
+            .andExpect(jsonPath("$.error").value("Not Found"))
+            .andExpect(jsonPath("$.message").value("Student not found with id: 9999"))
+            .andExpect(jsonPath("$.path").value("/api/v1/students/9999"))
+            .andExpect(jsonPath("$.errors").doesNotExist())
+            .andExpect(jsonPath("$.timestamp").exists());
     }
 
     @Test
@@ -120,7 +127,13 @@ class StudentControllerIntegrationTest {
             .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/api/v1/students/{id}", saved.getId()))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.status").value(404))
+            .andExpect(jsonPath("$.error").value("Not Found"))
+            .andExpect(jsonPath("$.message").value("Student not found with id: " + saved.getId()))
+            .andExpect(jsonPath("$.path").value("/api/v1/students/" + saved.getId()))
+            .andExpect(jsonPath("$.errors").doesNotExist())
+            .andExpect(jsonPath("$.timestamp").exists());
     }
 
     @Test
@@ -139,10 +152,14 @@ class StudentControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.error").value("Bad Request"))
+            .andExpect(jsonPath("$.message").value("Request validation failed."))
+            .andExpect(jsonPath("$.path").value("/api/v1/students"))
             .andExpect(jsonPath("$.errors[*].field", hasItem("firstName")))
             .andExpect(jsonPath("$.errors[*].field", hasItem("email")))
-            .andExpect(jsonPath("$.errors[*].message", hasItem("must not be blank")));
+            .andExpect(jsonPath("$.errors[*].message", hasItem("must not be blank")))
+            .andExpect(jsonPath("$.timestamp").exists());
     }
 
     @Test
@@ -169,8 +186,12 @@ class StudentControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updateBody))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.error").value("Bad Request"))
+            .andExpect(jsonPath("$.message").value("Request validation failed."))
+            .andExpect(jsonPath("$.path").value("/api/v1/students/" + saved.getId()))
             .andExpect(jsonPath("$.errors[*].field", hasItem("dateOfBirth")))
-            .andExpect(jsonPath("$.errors[*].message", hasItem("must be a past date")));
+            .andExpect(jsonPath("$.errors[*].message", hasItem("must be a past date")))
+            .andExpect(jsonPath("$.timestamp").exists());
     }
 }

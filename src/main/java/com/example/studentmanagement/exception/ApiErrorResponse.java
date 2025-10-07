@@ -1,20 +1,25 @@
 package com.example.studentmanagement.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.time.Instant;
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record ApiErrorResponse(
-    String code,
+    Instant timestamp,
+    int status,
+    String error,
     String message,
+    String path,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     List<FieldValidationError> errors
 ) {
 
     public ApiErrorResponse {
+        timestamp = timestamp == null ? Instant.now() : timestamp;
         errors = errors == null ? List.of() : List.copyOf(errors);
     }
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     public record FieldValidationError(
         String field,
         String message,
