@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.studentmanagement.model.Student;
 import com.example.studentmanagement.repository.StudentRepository;
 import java.time.LocalDate;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,6 +57,130 @@ class StudentControllerIntegrationTest {
             .andExpect(jsonPath("$.firstName").value("John"))
             .andExpect(jsonPath("$.lastName").value("Doe"))
             .andExpect(jsonPath("$.email").value("john.doe@example.com"));
+    }
+
+    @Test
+    @DisplayName("GET /students returns paged payload with metadata")
+    void getStudents_returnsPagedResponse() throws Exception {
+        saveStudent("Cathy", "Adams", "cathy.adams@example.com", LocalDate.of(1997, 4, 12));
+        saveStudent("Brian", "Doe", "brian.doe@example.com", LocalDate.of(1996, 6, 22));
+        saveStudent("Anna", "Smith", "anna.smith@example.com", LocalDate.of(1995, 2, 3));
+
+        mockMvc.perform(get("/api/v1/students")
+                .param("page", "0")
+                .param("size", "2")
+                .param("sort", "lastName,asc")
+                .param("sort", "firstName,asc"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content", hasSize(2)))
+            .andExpect(jsonPath("$.content[0].lastName").value("Adams"))
+            .andExpect(jsonPath("$.content[1].lastName").value("Doe"))
+            .andExpect(jsonPath("$.page.number").value(0))
+            .andExpect(jsonPath("$.page.size").value(2))
+            .andExpect(jsonPath("$.page.totalElements").value(3))
+            .andExpect(jsonPath("$.page.totalPages").value(2))
+            .andExpect(jsonPath("$.page.first").value(true))
+            .andExpect(jsonPath("$.page.last").value(false))
+            .andExpect(jsonPath("$.page.numberOfElements").value(2))
+            .andExpect(jsonPath("$.page.sort", hasSize(2)))
+            .andExpect(jsonPath("$.page.sort[0].property").value("lastName"))
+            .andExpect(jsonPath("$.page.sort[0].direction").value("ASC"));
+    }
+
+    @Test
+    @DisplayName("GET /students?page=0&size=5 limits page content")
+    void getStudents_pageZeroSizeFive() throws Exception {
+        saveStudentsWithSequentialLastNames(8);
+
+        mockMvc.perform(get("/api/v1/students")
+                .param("page", "0")
+                .param("size", "5"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content.length()").value(5))
+            .andExpect(jsonPath("$.page.number").value(0))
+            .andExpect(jsonPath("$.page.size").value(5));
+    }
+
+    @Test
+    @DisplayName("GET /students?page=1&size=5&sort=lastName,asc returns second page sorted")
+    void getStudents_pageOneSortedByLastName() throws Exception {
+        saveStudentsWithSequentialLastNames(12);
+
+        mockMvc.perform(get("/api/v1/students")
+                .param("page", "1")
+                .param("size", "5")
+                .param("sort", "lastName,asc"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.page.number").value(1))
+            .andExpect(jsonPath("$.page.size").value(5))
+            .andExpect(jsonPath("$.page.totalElements").value(12))
+            .andExpect(jsonPath("$.page.totalPages").value(3))
+            .andExpect(jsonPath("$.page.first").value(false))
+            .andExpect(jsonPath("$.page.last").value(false))
+            .andExpect(jsonPath("$.content[0].lastName").value("LastF"));
+    }
+
+    @Test
+    @DisplayName("GET /students with multiple sort criteria applies ordering correctly")
+    void getStudents_multipleSortCriteria() throws Exception {
+        saveStudent("Charlie", "Nguyen", "charlie.nguyen@example.com", LocalDate.of(1998, 1, 1));
+        saveStudent("Alice", "Nguyen", "alice.nguyen@example.com", LocalDate.of(1999, 1, 1));
+        saveStudent("Bob", "Nguyen", "bob.nguyen@example.com", LocalDate.of(1997, 1, 1));
+
+        mockMvc.perform(get("/api/v1/students")
+                .param("page", "0")
+                .param("size", "10")
+                .param("sort", "lastName,asc")
+                .param("sort", "firstName,desc"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content[0].firstName").value("Charlie"))
+            .andExpect(jsonPath("$.content[1].firstName").value("Bob"))
+            .andExpect(jsonPath("$.content[2].firstName").value("Alice"));
+    }
+
+    @Test
+    @DisplayName("GET /students applies default paging when parameters are absent")
+    void getStudents_appliesDefaultPaging() throws Exception {
+        saveStudent("Alpha", "One", "alpha.one@example.com", LocalDate.of(2000, 1, 1));
+        saveStudent("Bravo", "Two", "bravo.two@example.com", LocalDate.of(2000, 2, 2));
+
+        mockMvc.perform(get("/api/v1/students"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.page.number").value(0))
+            .andExpect(jsonPath("$.page.size").value(20))
+            .andExpect(jsonPath("$.page.sort", hasSize(1)))
+            .andExpect(jsonPath("$.page.sort[0].property").value("id"))
+            .andExpect(jsonPath("$.page.sort[0].direction").value("ASC"));
+    }
+
+    @Test
+    @DisplayName("GET /students caps requested size at maximum limit")
+    void getStudents_capsPageSize() throws Exception {
+        saveStudent("Gamma", "Three", "gamma.three@example.com", LocalDate.of(2000, 3, 3));
+
+        mockMvc.perform(get("/api/v1/students").param("size", "200"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.page.size").value(100))
+            .andExpect(jsonPath("$.page.number").value(0));
+    }
+
+    @Test
+    @DisplayName("GET /students rejects negative page size")
+    void getStudents_rejectsNegativePageSize() throws Exception {
+        mockMvc.perform(get("/api/v1/students").param("size", "-5"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.error").value("Bad Request"))
+            .andExpect(jsonPath("$.message").value("Page size must be greater than zero."));
+    }
+
+    @Test
+    @DisplayName("GET /students with invalid sort property returns 400")
+    void getStudents_invalidSortProperty() throws Exception {
+        mockMvc.perform(get("/api/v1/students").param("sort", "unknown,asc"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.message").value("Invalid sort property: unknown"));
     }
 
     @Test
@@ -193,5 +318,21 @@ class StudentControllerIntegrationTest {
             .andExpect(jsonPath("$.errors[*].field", hasItem("dateOfBirth")))
             .andExpect(jsonPath("$.errors[*].message", hasItem("must be a past date")))
             .andExpect(jsonPath("$.timestamp").exists());
+    }
+
+    private void saveStudent(String firstName, String lastName, String email, LocalDate dateOfBirth) {
+        studentRepository.save(new Student(firstName, lastName, email, dateOfBirth));
+    }
+
+    private void saveStudentsWithSequentialLastNames(int count) {
+        IntStream.range(0, count).forEach(i -> {
+            char suffix = (char) ('A' + i);
+            saveStudent(
+                "Student" + suffix,
+                "Last" + suffix,
+                "student" + suffix + "@example.com",
+                LocalDate.of(1990, 1, 1).plusDays(i)
+            );
+        });
     }
 }
