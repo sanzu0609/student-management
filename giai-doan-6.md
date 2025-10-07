@@ -31,8 +31,8 @@ Cải thiện `GET /api/v1/students` để hỗ trợ **phân trang** và **sắ
 - [x] Đảm bảo các trường phân trang quan trọng có trong response để client hiển thị UI phân trang.
 
 ### Task 4: Quy ước & giá trị mặc định
-- [ ] Thiết lập **mặc định** cho `page=0`, `size` hợp lý (ví dụ 10 hoặc 20), `sort` mặc định (ví dụ `id,asc`).  
-- [ ] Xử lý trường hợp `size` vượt ngưỡng tối đa (ví dụ >100) để tránh abuse.
+- [x] Thiết lập **mặc định** cho `page=0`, `size` hợp lý (ví dụ 10 hoặc 20), `sort` mặc định (ví dụ `id,asc`).  
+- [x] Xử lý trường hợp `size` vượt ngưỡng tối đa (ví dụ >100) để tránh abuse.
 
 ### Task 5: Kiểm thử
 - [ ] Kiểm thử với các bộ tham số:  
