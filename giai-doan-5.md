@@ -7,7 +7,7 @@ Thiết lập cơ chế xử lý lỗi tập trung (global) để **chuẩn hóa
 
 ## ✅ Acceptance Criteria
 - [x] Tạo **custom exception** `ResourceNotFoundException`.  
-- [ ] Trong `StudentService`, **ném** `ResourceNotFoundException` khi không tìm thấy sinh viên theo ID.  
+- [x] Trong `StudentService`, **ném** `ResourceNotFoundException` khi không tìm thấy sinh viên theo ID.  
 - [ ] Tạo `GlobalExceptionHandler` và đánh dấu bằng `@ControllerAdvice`.  
 - [ ] Trong `GlobalExceptionHandler`, xử lý:  
   - [ ] `ResourceNotFoundException` → trả **404 Not Found**.  
@@ -24,8 +24,8 @@ Thiết lập cơ chế xử lý lỗi tập trung (global) để **chuẩn hóa
 - [x] Xác định thông điệp lỗi nhận tham số (vd: id).  
 
 ### Task 2: Tích hợp vào Service
-- [ ] Cập nhật `StudentService` để ném `ResourceNotFoundException` khi không tìm thấy ID.  
-- [ ] Đảm bảo tất cả luồng đọc/cập nhật/xóa đều xử lý trường hợp không tìm thấy.  
+- [x] Cập nhật `StudentService` để ném `ResourceNotFoundException` khi không tìm thấy ID.  
+- [x] Đảm bảo tất cả luồng đọc/cập nhật/xóa đều xử lý trường hợp không tìm thấy.  
 
 ### Task 3: Tạo Global Exception Handler
 - [ ] Tạo class `GlobalExceptionHandler` với `@ControllerAdvice`.  
