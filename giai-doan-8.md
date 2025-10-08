@@ -8,7 +8,7 @@ Viết **integration test** kiểm tra toàn bộ luồng từ **Controller → 
 ## ✅ Acceptance Criteria
 - [x] Tạo test class `StudentControllerIntegrationTest`.  
 - [x] Sử dụng `@SpringBootTest` và `@AutoConfigureMockMvc`.  
-- [ ] Viết test case gọi các endpoint `GET / POST / PUT / DELETE` và kiểm tra:  
+- [x] Viết test case gọi các endpoint `GET / POST / PUT / DELETE` và kiểm tra:  
   - [x] HTTP status.  
   - [x] Nội dung JSON response.  
 
@@ -43,7 +43,6 @@ Viết **integration test** kiểm tra toàn bộ luồng từ **Controller → 
 - [x] Mong đợi `201 Created` (hoặc `200 OK` tùy quy ước).  
 - [x] Kiểm tra `Location` header (nếu áp dụng) và các field trong body.  
 - [x] Thử payload không hợp lệ → mong đợi `400 Bad Request` + chi tiết lỗi validation.  
-- [x] Thử payload không hợp lệ → mong đợi `400 Bad Request` + chi tiết lỗi validation.  
 
 ### Task 6: Test PUT cập nhật
 - [x] Tạo trước một student (seed hoặc POST).  
@@ -58,34 +57,34 @@ Viết **integration test** kiểm tra toàn bộ luồng từ **Controller → 
 - [x] Gọi lại GET {id} → mong đợi 404 Not Found.  
 
 ### Task 8: (Tuỳ chọn) Test Pagination/Sorting
-- [ ] Nếu API hỗ trợ `page/size/sort`, test một vài tổ hợp tham số và xác nhận trường phân trang trong JSON.  
+- [x] Nếu API hỗ trợ `page/size/sort`, test một vài tổ hợp tham số và xác nhận trường phân trang trong JSON.  
 
 ---
 
 ## 🧪 Checklist kiểm thử (ví dụ)
-- [ ] `GET /api/v1/students` → 200, mảng `content`/danh sách có kích thước hợp lý.  
+- [x] `GET /api/v1/students` → 200, mảng `content`/danh sách có kích thước hợp lý.  
 - [x] `GET /api/v1/students/{id}` (tồn tại) → 200, `jsonPath("$.id") == {id}`.  
 - [x] `GET /api/v1/students/{id}` (không tồn tại) → 404, JSON lỗi thống nhất.  
 - [x] `POST /api/v1/students` (hợp lệ) → 201 + body trả về đúng trường.  
 - [x] `POST` (không hợp lệ) → 400 + danh sách lỗi.  
-- [ ] `PUT /api/v1/students/{id}` (tồn tại) → 200/204 + dữ liệu cập nhật đúng.  
-- [ ] `DELETE /api/v1/students/{id}` (tồn tại) → 204, `GET {id}` → 404.  
+- [x] `PUT /api/v1/students/{id}` (tồn tại) → 200/204 + dữ liệu cập nhật đúng.  
+- [x] `DELETE /api/v1/students/{id}` (tồn tại) → 204, `GET {id}` → 404.  
 
 ---
 
 ## 🧰 Gợi ý kỹ thuật (không code)
-- [ ] **MockMvc**: dùng `perform(...)` với `get/post/put/delete`, set `contentType`, `content`, `accept`.  
+- [x] **MockMvc**: dùng `perform(...)` với `get/post/put/delete`, set `contentType`, `content`, `accept`.  
 - [x] **jsonPath**: kiểm tra field cụ thể trong JSON response (`$.id`, `$.email`, `$.errors[0].field`, ...).  
-- [ ] **ObjectMapper** (Jackson): `writeValueAsString(object)` để tạo JSON từ object; `readTree` để đọc lại.  
+- [x] **ObjectMapper** (Jackson): `writeValueAsString(object)` để tạo JSON từ object; `readTree` để đọc lại.  
 - [ ] **Transactional/Testcontainers** (tuỳ chọn): nếu cần cô lập hơn cho DB.  
 
 ---
 
 ## 🚀 Cách chạy test (tham khảo)
-- [ ] `mvn -q -Dtest=StudentControllerIntegrationTest test` hoặc `mvn test`.  
+- [x] `mvn -q -Dtest=StudentControllerIntegrationTest test` hoặc `mvn test`.  
 - [ ] Tích hợp CI để chạy test trên mỗi pull request.  
 
 ---
 
 ## 🎓 Giai đoạn 8 | Độ khó: Intermediate
-- [ ] Sau khi hoàn tất, hệ thống có **integration test đáng tin cậy** cho các API chính, giảm rủi ro khi refactor/mở rộng.
+- [x] Sau khi hoàn tất, hệ thống có **integration test đáng tin cậy** cho các API chính, giảm rủi ro khi refactor/mở rộng.
