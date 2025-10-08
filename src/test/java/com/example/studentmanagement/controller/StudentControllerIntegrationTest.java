@@ -94,6 +94,39 @@ class StudentControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("GET /students returns empty payload when there are no students")
+    void getStudents_whenRepositoryEmpty_returnsEmptyContent() throws Exception {
+        mockMvc.perform(get("/api/v1/students"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content", hasSize(0)))
+            .andExpect(jsonPath("$.page.totalElements").value(0))
+            .andExpect(jsonPath("$.page.totalPages").value(0))
+            .andExpect(jsonPath("$.page.numberOfElements").value(0))
+            .andExpect(jsonPath("$.page.first").value(true))
+            .andExpect(jsonPath("$.page.last").value(true));
+    }
+
+    @Test
+    @DisplayName("GET /students returns default page with student fields when data exists")
+    void getStudents_whenDataExists_returnsContentWithFields() throws Exception {
+        List<Student> seededStudents = seedDefaultStudents();
+
+        mockMvc.perform(get("/api/v1/students"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content", hasSize(seededStudents.size())))
+            .andExpect(jsonPath("$.content[0].firstName").value("Cathy"))
+            .andExpect(jsonPath("$.content[0].lastName").value("Adams"))
+            .andExpect(jsonPath("$.content[0].email").value("cathy.adams@example.com"))
+            .andExpect(jsonPath("$.content[0].dateOfBirth").value("1997-04-12"))
+            .andExpect(jsonPath("$.page.totalElements").value(seededStudents.size()))
+            .andExpect(jsonPath("$.page.size").value(20))
+            .andExpect(jsonPath("$.page.number").value(0))
+            .andExpect(jsonPath("$.page.totalPages").value(1))
+            .andExpect(jsonPath("$.page.first").value(true))
+            .andExpect(jsonPath("$.page.last").value(true));
+    }
+
+    @Test
     @DisplayName("GET /students?page=0&size=5 limits page content")
     void getStudents_pageZeroSizeFive() throws Exception {
         saveStudentsWithSequentialLastNames(8);

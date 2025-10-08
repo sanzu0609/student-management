@@ -27,9 +27,9 @@ Viết **integration test** kiểm tra toàn bộ luồng từ **Controller → 
 - [x] Xoá/đặt lại dữ liệu trước mỗi test (nếu cần) để tests **độc lập**.  
 
 ### Task 3: Test GET danh sách
-- [ ] Gọi `GET /api/v1/students`.  
-- [ ] Mong đợi `200 OK`.  
-- [ ] Kiểm tra JSON trả về: mảng có kích thước ≥ 0, các trường cần thiết xuất hiện.  
+- [x] Gọi `GET /api/v1/students`.  
+- [x] Mong đợi `200 OK`.  
+- [x] Kiểm tra JSON trả về: mảng có kích thước ≥ 0, các trường cần thiết xuất hiện.  
 
 ### Task 4: Test GET chi tiết theo ID
 - [ ] Gọi `GET /api/v1/students/{id}` với ID tồn tại.  
