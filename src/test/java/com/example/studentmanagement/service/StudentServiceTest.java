@@ -123,6 +123,83 @@ class StudentServiceTest {
         verify(studentRepository, never()).save(any(Student.class));
     }
 
+    @Test
+    void updateStudent_whenStudentExists_updatesFieldsAndSavesTrimmedData() {
+        long studentId = 101L;
+        Student existing = studentWithId(studentId, "Old");
+        existing.setLastName("Value");
+        existing.setEmail("old.value@example.com");
+        existing.setDateOfBirth(LocalDate.of(1990, 1, 1));
+
+        Student payload = new Student(
+            "  New  ",
+            "  Name ",
+            " new.name@example.com ",
+            LocalDate.of(2001, 12, 3)
+        );
+
+        when(studentRepository.findById(studentId)).thenReturn(Optional.of(existing));
+        when(studentRepository.save(any(Student.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Student updated = studentService.updateStudent(studentId, payload);
+
+        assertEquals(studentId, updated.getId());
+        assertEquals("New", updated.getFirstName());
+        assertEquals("Name", updated.getLastName());
+        assertEquals("new.name@example.com", updated.getEmail());
+        assertEquals(LocalDate.of(2001, 12, 3), updated.getDateOfBirth());
+
+        ArgumentCaptor<Student> studentCaptor = ArgumentCaptor.forClass(Student.class);
+        verify(studentRepository, times(1)).findById(studentId);
+        verify(studentRepository, times(1)).save(studentCaptor.capture());
+
+        Student persisted = studentCaptor.getValue();
+        assertEquals(studentId, persisted.getId());
+        assertEquals("New", persisted.getFirstName());
+        assertEquals("Name", persisted.getLastName());
+        assertEquals("new.name@example.com", persisted.getEmail());
+        assertEquals(LocalDate.of(2001, 12, 3), persisted.getDateOfBirth());
+    }
+
+    @Test
+    void updateStudent_whenStudentMissing_throwsResourceNotFoundException() {
+        long studentId = 202L;
+        Student payload = new Student(
+            "Bruce",
+            "Wayne",
+            "bruce.wayne@wayneenterprises.com",
+            LocalDate.of(1995, 4, 17)
+        );
+
+        when(studentRepository.findById(studentId)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> studentService.updateStudent(studentId, payload));
+        verify(studentRepository, times(1)).findById(studentId);
+        verify(studentRepository, never()).save(any(Student.class));
+    }
+
+    @Test
+    void updateStudent_whenPayloadInvalid_throwsInvalidStudentDataException() {
+        long studentId = 303L;
+        Student existing = studentWithId(studentId, "Existing");
+        existing.setLastName("Student");
+        existing.setEmail("existing.student@example.com");
+        existing.setDateOfBirth(LocalDate.of(1993, 8, 9));
+
+        Student invalidPayload = new Student(
+            " ",
+            "Rogers",
+            "steve.rogers@avengers.com",
+            LocalDate.of(1992, 7, 4)
+        );
+
+        when(studentRepository.findById(studentId)).thenReturn(Optional.of(existing));
+
+        assertThrows(InvalidStudentDataException.class, () -> studentService.updateStudent(studentId, invalidPayload));
+        verify(studentRepository, times(1)).findById(studentId);
+        verify(studentRepository, never()).save(any(Student.class));
+    }
+
     private Student studentWithId(Long id, String firstName) {
         Student student = new Student(
             firstName,

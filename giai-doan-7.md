@@ -1,4 +1,4 @@
-# 📌 Giai đoạn 7: Unit Test cho StudentService (JUnit 5 + Mockito)
+﻿# 📌 Giai đoạn 7: Unit Test cho StudentService (JUnit 5 + Mockito)
 
 ## 🎯 Mục tiêu
 Viết **unit test** cho các phương thức trong `StudentService` để kiểm tra logic nghiệp vụ một cách độc lập, **không phụ thuộc vào database thật** (mock `StudentRepository`).
@@ -36,9 +36,9 @@ Viết **unit test** cho các phương thức trong `StudentService` để kiể
 - [x] **verify()** các tương tác với repository (`save()`, `existsBy...()`).  
 
 ### Task 4: Viết test cho chức năng cập nhật
-- [ ] **updateStudent** — *tìm thấy*: cập nhật thành công, giá trị mới đúng.  
-- [ ] **updateStudent** — *không tìm thấy*: ném `ResourceNotFoundException`.  
-- [ ] **updateStudent** — ràng buộc nghiệp vụ (nếu có): ví dụ email trùng người khác → ném lỗi.  
+- [x] **updateStudent** — *tìm thấy*: cập nhật thành công, giá trị mới đúng.  
+- [x] **updateStudent** — *không tìm thấy*: ném `ResourceNotFoundException`.  
+- [x] **updateStudent** — ràng buộc nghiệp vụ (nếu có): ví dụ email trùng người khác → ném lỗi.  
 
 ### Task 5: Viết test cho chức năng xóa
 - [ ] **deleteStudent** — *tìm thấy*: gọi `deleteById()` đúng tham số.  
