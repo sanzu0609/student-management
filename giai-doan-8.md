@@ -32,10 +32,10 @@ Viết **integration test** kiểm tra toàn bộ luồng từ **Controller → 
 - [x] Kiểm tra JSON trả về: mảng có kích thước ≥ 0, các trường cần thiết xuất hiện.  
 
 ### Task 4: Test GET chi tiết theo ID
-- [ ] Gọi `GET /api/v1/students/{id}` với ID tồn tại.  
-- [ ] Mong đợi `200 OK`.  
-- [ ] Kiểm tra `jsonPath` các field (`id`, `firstName`, `lastName`, `email`, `dateOfBirth`).  
-- [ ] Với ID không tồn tại: mong đợi `404 Not Found` + cấu trúc lỗi chuẩn (nếu đã có GlobalExceptionHandler).  
+- [x] Gọi `GET /api/v1/students/{id}` với ID tồn tại.  
+- [x] Mong đợi `200 OK`.  
+- [x] Kiểm tra `jsonPath` các field (`id`, `firstName`, `lastName`, `email`, `dateOfBirth`).  
+- [x] Với ID không tồn tại: mong đợi `404 Not Found` + cấu trúc lỗi chuẩn (nếu đã có GlobalExceptionHandler).  
 
 ### Task 5: Test POST tạo mới
 - [ ] Chuẩn bị payload JSON hợp lệ (dùng `ObjectMapper` để serialize object).  
@@ -63,8 +63,8 @@ Viết **integration test** kiểm tra toàn bộ luồng từ **Controller → 
 
 ## 🧪 Checklist kiểm thử (ví dụ)
 - [ ] `GET /api/v1/students` → 200, mảng `content`/danh sách có kích thước hợp lý.  
-- [ ] `GET /api/v1/students/{id}` (tồn tại) → 200, `jsonPath("$.id") == {id}`.  
-- [ ] `GET /api/v1/students/{id}` (không tồn tại) → 404, JSON lỗi thống nhất.  
+- [x] `GET /api/v1/students/{id}` (tồn tại) → 200, `jsonPath("$.id") == {id}`.  
+- [x] `GET /api/v1/students/{id}` (không tồn tại) → 404, JSON lỗi thống nhất.  
 - [ ] `POST /api/v1/students` (hợp lệ) → 201 + body trả về đúng trường.  
 - [ ] `POST` (không hợp lệ) → 400 + danh sách lỗi.  
 - [ ] `PUT /api/v1/students/{id}` (tồn tại) → 200/204 + dữ liệu cập nhật đúng.  
@@ -74,7 +74,7 @@ Viết **integration test** kiểm tra toàn bộ luồng từ **Controller → 
 
 ## 🧰 Gợi ý kỹ thuật (không code)
 - [ ] **MockMvc**: dùng `perform(...)` với `get/post/put/delete`, set `contentType`, `content`, `accept`.  
-- [ ] **jsonPath**: kiểm tra field cụ thể trong JSON response (`$.id`, `$.email`, `$.errors[0].field`, ...).  
+- [x] **jsonPath**: kiểm tra field cụ thể trong JSON response (`$.id`, `$.email`, `$.errors[0].field`, ...).  
 - [ ] **ObjectMapper** (Jackson): `writeValueAsString(object)` để tạo JSON từ object; `readTree` để đọc lại.  
 - [ ] **Transactional/Testcontainers** (tuỳ chọn): nếu cần cô lập hơn cho DB.  
 

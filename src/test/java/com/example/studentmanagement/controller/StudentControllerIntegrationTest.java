@@ -127,6 +127,37 @@ class StudentControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("GET /students/{id} returns student when present")
+    void getStudentById_whenExists_returnsStudent() throws Exception {
+        Student persisted = seedStudents(
+            new Student("Jane", "Doe", "jane.doe@example.com", LocalDate.of(1994, 2, 14))
+        ).get(0);
+
+        mockMvc.perform(get("/api/v1/students/{id}", persisted.getId()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(persisted.getId()))
+            .andExpect(jsonPath("$.firstName").value("Jane"))
+            .andExpect(jsonPath("$.lastName").value("Doe"))
+            .andExpect(jsonPath("$.email").value("jane.doe@example.com"))
+            .andExpect(jsonPath("$.dateOfBirth").value("1994-02-14"));
+    }
+
+    @Test
+    @DisplayName("GET /students/{id} returns 404 when student missing")
+    void getStudentById_whenMissing_returnsNotFound() throws Exception {
+        long missingId = 9999L;
+
+        mockMvc.perform(get("/api/v1/students/{id}", missingId))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.status").value(404))
+            .andExpect(jsonPath("$.error").value("Not Found"))
+            .andExpect(jsonPath("$.message").value("Student not found with id: " + missingId))
+            .andExpect(jsonPath("$.path").value("/api/v1/students/" + missingId))
+            .andExpect(jsonPath("$.errors").doesNotExist())
+            .andExpect(jsonPath("$.timestamp").exists());
+    }
+
+    @Test
     @DisplayName("GET /students?page=0&size=5 limits page content")
     void getStudents_pageZeroSizeFive() throws Exception {
         saveStudentsWithSequentialLastNames(8);
