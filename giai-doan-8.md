@@ -46,16 +46,16 @@ Viết **integration test** kiểm tra toàn bộ luồng từ **Controller → 
 - [x] Thử payload không hợp lệ → mong đợi `400 Bad Request` + chi tiết lỗi validation.  
 
 ### Task 6: Test PUT cập nhật
-- [ ] Tạo trước một student (seed hoặc POST).  
-- [ ] Gọi `PUT /api/v1/students/{id}` với JSON cập nhật hợp lệ.  
-- [ ] Mong đợi `200 OK` (hoặc `204 No Content` tuỳ quy ước) và nội dung cập nhật đúng.  
-- [ ] Với ID không tồn tại → mong đợi `404 Not Found`.  
+- [x] Tạo trước một student (seed hoặc POST).  
+- [x] Gọi `PUT /api/v1/students/{id}` với JSON cập nhật hợp lệ.  
+- [x] Mong đợi `200 OK` (hoặc `204 No Content` tuỳ quy ước) và nội dung cập nhật đúng.  
+- [x] Với ID không tồn tại → mong đợi `404 Not Found`.  
 
 ### Task 7: Test DELETE xoá
-- [ ] Tạo trước một student.  
-- [ ] Gọi `DELETE /api/v1/students/{id}`.  
-- [ ] Mong đợi `204 No Content`.  
-- [ ] Gọi lại `GET {id}` → mong đợi `404 Not Found`.  
+- [x] Tạo trước một student.  
+- [x] Gọi DELETE /api/v1/students/{id}.  
+- [x] Mong đợi 204 No Content.  
+- [x] Gọi lại GET {id} → mong đợi 404 Not Found.  
 
 ### Task 8: (Tuỳ chọn) Test Pagination/Sorting
 - [ ] Nếu API hỗ trợ `page/size/sort`, test một vài tổ hợp tham số và xác nhận trường phân trang trong JSON.  
