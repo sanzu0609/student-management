@@ -38,11 +38,12 @@ Viết **integration test** kiểm tra toàn bộ luồng từ **Controller → 
 - [x] Với ID không tồn tại: mong đợi `404 Not Found` + cấu trúc lỗi chuẩn (nếu đã có GlobalExceptionHandler).  
 
 ### Task 5: Test POST tạo mới
-- [ ] Chuẩn bị payload JSON hợp lệ (dùng `ObjectMapper` để serialize object).  
-- [ ] Gọi `POST /api/v1/students` với `Content-Type: application/json`.  
-- [ ] Mong đợi `201 Created` (hoặc `200 OK` tuỳ quy ước).  
-- [ ] Kiểm tra `Location` header (nếu áp dụng) và các field trong body.  
-- [ ] Thử payload không hợp lệ → mong đợi `400 Bad Request` + chi tiết lỗi validation.  
+- [x] Chuẩn bị payload JSON hợp lệ (dùng `ObjectMapper` để serialize object).  
+- [x] Gọi `POST /api/v1/students` với `Content-Type: application/json`.  
+- [x] Mong đợi `201 Created` (hoặc `200 OK` tùy quy ước).  
+- [x] Kiểm tra `Location` header (nếu áp dụng) và các field trong body.  
+- [x] Thử payload không hợp lệ → mong đợi `400 Bad Request` + chi tiết lỗi validation.  
+- [x] Thử payload không hợp lệ → mong đợi `400 Bad Request` + chi tiết lỗi validation.  
 
 ### Task 6: Test PUT cập nhật
 - [ ] Tạo trước một student (seed hoặc POST).  
@@ -65,8 +66,8 @@ Viết **integration test** kiểm tra toàn bộ luồng từ **Controller → 
 - [ ] `GET /api/v1/students` → 200, mảng `content`/danh sách có kích thước hợp lý.  
 - [x] `GET /api/v1/students/{id}` (tồn tại) → 200, `jsonPath("$.id") == {id}`.  
 - [x] `GET /api/v1/students/{id}` (không tồn tại) → 404, JSON lỗi thống nhất.  
-- [ ] `POST /api/v1/students` (hợp lệ) → 201 + body trả về đúng trường.  
-- [ ] `POST` (không hợp lệ) → 400 + danh sách lỗi.  
+- [x] `POST /api/v1/students` (hợp lệ) → 201 + body trả về đúng trường.  
+- [x] `POST` (không hợp lệ) → 400 + danh sách lỗi.  
 - [ ] `PUT /api/v1/students/{id}` (tồn tại) → 200/204 + dữ liệu cập nhật đúng.  
 - [ ] `DELETE /api/v1/students/{id}` (tồn tại) → 204, `GET {id}` → 404.  
 

@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.studentmanagement.model.Student;
 import com.example.studentmanagement.repository.StudentRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +36,9 @@ class StudentControllerIntegrationTest {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @BeforeEach
     void setUp() {
         studentRepository.deleteAll();
@@ -48,19 +52,18 @@ class StudentControllerIntegrationTest {
     @Test
     @DisplayName("POST /students returns 201 and body")
     void createStudent_returnsCreated() throws Exception {
-        String requestBody = """
-            {
-              \"firstName\": \" John \",
-              \"lastName\": \" Doe \",
-              \"email\": \"john.doe@example.com\",
-              \"dateOfBirth\": \"2000-01-01\"
-            }
-            """;
+        StudentPayload payload = new StudentPayload(
+            " John ",
+            " Doe ",
+            "john.doe@example.com",
+            LocalDate.of(2000, 1, 1)
+        );
 
         mockMvc.perform(post("/api/v1/students")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
+                .content(objectMapper.writeValueAsString(payload)))
             .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.id").exists())
             .andExpect(jsonPath("$.id").isNumber())
             .andExpect(jsonPath("$.firstName").value("John"))
             .andExpect(jsonPath("$.lastName").value("Doe"))
@@ -334,18 +337,16 @@ class StudentControllerIntegrationTest {
     @Test
     @DisplayName("POST /students returns 400 with validation errors for invalid payload")
     void createStudent_returnsBadRequestForInvalidData() throws Exception {
-        String requestBody = """
-            {
-              "firstName": "",
-              "lastName": "Doe",
-              "email": "not-an-email",
-              "dateOfBirth": null
-            }
-            """;
+        StudentPayload payload = new StudentPayload(
+            "",
+            "Doe",
+            "not-an-email",
+            null
+        );
 
         mockMvc.perform(post("/api/v1/students")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
+                .content(objectMapper.writeValueAsString(payload)))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.status").value(400))
             .andExpect(jsonPath("$.error").value("Bad Request"))
@@ -368,18 +369,16 @@ class StudentControllerIntegrationTest {
         ));
 
         String futureDate = LocalDate.now().plusDays(1).toString();
-        String updateBody = """
-            {
-              "firstName": "Mai",
-              "lastName": "Le",
-              "email": "mai.le@example.com",
-              "dateOfBirth": "%s"
-            }
-            """.formatted(futureDate);
+        StudentPayload updateBody = new StudentPayload(
+            "Mai",
+            "Le",
+            "mai.le@example.com",
+            LocalDate.parse(futureDate)
+        );
 
         mockMvc.perform(put("/api/v1/students/{id}", saved.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(updateBody))
+                .content(objectMapper.writeValueAsString(updateBody)))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.status").value(400))
             .andExpect(jsonPath("$.error").value("Bad Request"))
@@ -418,5 +417,14 @@ class StudentControllerIntegrationTest {
         return Arrays.stream(students)
             .map(studentRepository::save)
             .toList();
+    }
+
+
+    private record StudentPayload(
+        String firstName,
+        String lastName,
+        String email,
+        LocalDate dateOfBirth
+    ) {
     }
 }
