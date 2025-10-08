@@ -26,9 +26,9 @@ Viết **unit test** cho các phương thức trong `StudentService` để kiể
 - [x] Khởi tạo `StudentService` với `StudentRepository` đã mock.  
 
 ### Task 2: Viết test cho chức năng đọc
-- [ ] **getAllStudents**: trả về danh sách đúng số lượng/phần tử.  
-- [ ] **getStudentById** — *tìm thấy*: trả về đối tượng đúng.  
-- [ ] **getStudentById** — *không tìm thấy*: ném exception phù hợp (ví dụ `ResourceNotFoundException`).  
+- [x] **getAllStudents**: trả về danh sách đúng số lượng/phần tử.  
+- [x] **getStudentById** — *tìm thấy*: trả về đối tượng đúng.  
+- [x] **getStudentById** — *không tìm thấy*: ném exception phù hợp (ví dụ `ResourceNotFoundException`).  
 
 ### Task 3: Viết test cho chức năng tạo
 - [ ] **createStudent** — happy path: trả về đối tượng đã tạo với thuộc tính hợp lệ.  
