@@ -41,8 +41,8 @@ Viết **unit test** cho các phương thức trong `StudentService` để kiể
 - [x] **updateStudent** — ràng buộc nghiệp vụ (nếu có): ví dụ email trùng người khác → ném lỗi.  
 
 ### Task 5: Viết test cho chức năng xóa
-- [ ] **deleteStudent** — *tìm thấy*: gọi `deleteById()` đúng tham số.  
-- [ ] **deleteStudent** — *không tìm thấy*: ném `ResourceNotFoundException`.  
+- [x] **deleteStudent** — *tìm thấy*: gọi `deleteById()` đúng tham số.  
+- [x] **deleteStudent** — *không tìm thấy*: ném `ResourceNotFoundException`.  
 
 ### Task 6: Bảo đảm chất lượng test
 - [ ] Kiểm tra **verifyNoMoreInteractions** với repository (khi cần).  

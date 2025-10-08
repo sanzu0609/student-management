@@ -200,6 +200,29 @@ class StudentServiceTest {
         verify(studentRepository, never()).save(any(Student.class));
     }
 
+    @Test
+    void deleteStudent_whenStudentExists_invokesDeleteById() {
+        long studentId = 4040L;
+        Student existing = studentWithId(studentId, "Target");
+        when(studentRepository.findById(studentId)).thenReturn(Optional.of(existing));
+
+        studentService.deleteStudent(studentId);
+
+        verify(studentRepository, times(1)).findById(studentId);
+        verify(studentRepository, times(1)).deleteById(studentId);
+    }
+
+    @Test
+    void deleteStudent_whenStudentMissing_throwsResourceNotFoundException() {
+        long studentId = 5050L;
+        when(studentRepository.findById(studentId)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> studentService.deleteStudent(studentId));
+
+        verify(studentRepository, times(1)).findById(studentId);
+        verify(studentRepository, never()).deleteById(studentId);
+    }
+
     private Student studentWithId(Long id, String firstName) {
         Student student = new Student(
             firstName,
