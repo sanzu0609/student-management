@@ -11,8 +11,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.studentmanagement.model.Student;
 import com.example.studentmanagement.repository.StudentRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.IntStream;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,27 +36,34 @@ class StudentControllerIntegrationTest {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @BeforeEach
     void setUp() {
+        studentRepository.deleteAll();
+    }
+
+    @AfterEach
+    void tearDown() {
         studentRepository.deleteAll();
     }
 
     @Test
     @DisplayName("POST /students returns 201 and body")
     void createStudent_returnsCreated() throws Exception {
-        String requestBody = """
-            {
-              \"firstName\": \" John \",
-              \"lastName\": \" Doe \",
-              \"email\": \"john.doe@example.com\",
-              \"dateOfBirth\": \"2000-01-01\"
-            }
-            """;
+        StudentPayload payload = new StudentPayload(
+            " John ",
+            " Doe ",
+            "john.doe@example.com",
+            LocalDate.of(2000, 1, 1)
+        );
 
         mockMvc.perform(post("/api/v1/students")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
+                .content(objectMapper.writeValueAsString(payload)))
             .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.id").exists())
             .andExpect(jsonPath("$.id").isNumber())
             .andExpect(jsonPath("$.firstName").value("John"))
             .andExpect(jsonPath("$.lastName").value("Doe"))
@@ -62,9 +73,7 @@ class StudentControllerIntegrationTest {
     @Test
     @DisplayName("GET /students returns paged payload with metadata")
     void getStudents_returnsPagedResponse() throws Exception {
-        saveStudent("Cathy", "Adams", "cathy.adams@example.com", LocalDate.of(1997, 4, 12));
-        saveStudent("Brian", "Doe", "brian.doe@example.com", LocalDate.of(1996, 6, 22));
-        saveStudent("Anna", "Smith", "anna.smith@example.com", LocalDate.of(1995, 2, 3));
+        seedDefaultStudents();
 
         mockMvc.perform(get("/api/v1/students")
                 .param("page", "0")
@@ -85,6 +94,70 @@ class StudentControllerIntegrationTest {
             .andExpect(jsonPath("$.page.sort", hasSize(2)))
             .andExpect(jsonPath("$.page.sort[0].property").value("lastName"))
             .andExpect(jsonPath("$.page.sort[0].direction").value("ASC"));
+    }
+
+    @Test
+    @DisplayName("GET /students returns empty payload when there are no students")
+    void getStudents_whenRepositoryEmpty_returnsEmptyContent() throws Exception {
+        mockMvc.perform(get("/api/v1/students"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content", hasSize(0)))
+            .andExpect(jsonPath("$.page.totalElements").value(0))
+            .andExpect(jsonPath("$.page.totalPages").value(0))
+            .andExpect(jsonPath("$.page.numberOfElements").value(0))
+            .andExpect(jsonPath("$.page.first").value(true))
+            .andExpect(jsonPath("$.page.last").value(true));
+    }
+
+    @Test
+    @DisplayName("GET /students returns default page with student fields when data exists")
+    void getStudents_whenDataExists_returnsContentWithFields() throws Exception {
+        List<Student> seededStudents = seedDefaultStudents();
+
+        mockMvc.perform(get("/api/v1/students"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content", hasSize(seededStudents.size())))
+            .andExpect(jsonPath("$.content[0].firstName").value("Cathy"))
+            .andExpect(jsonPath("$.content[0].lastName").value("Adams"))
+            .andExpect(jsonPath("$.content[0].email").value("cathy.adams@example.com"))
+            .andExpect(jsonPath("$.content[0].dateOfBirth").value("1997-04-12"))
+            .andExpect(jsonPath("$.page.totalElements").value(seededStudents.size()))
+            .andExpect(jsonPath("$.page.size").value(20))
+            .andExpect(jsonPath("$.page.number").value(0))
+            .andExpect(jsonPath("$.page.totalPages").value(1))
+            .andExpect(jsonPath("$.page.first").value(true))
+            .andExpect(jsonPath("$.page.last").value(true));
+    }
+
+    @Test
+    @DisplayName("GET /students/{id} returns student when present")
+    void getStudentById_whenExists_returnsStudent() throws Exception {
+        Student persisted = seedStudents(
+            new Student("Jane", "Doe", "jane.doe@example.com", LocalDate.of(1994, 2, 14))
+        ).get(0);
+
+        mockMvc.perform(get("/api/v1/students/{id}", persisted.getId()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(persisted.getId()))
+            .andExpect(jsonPath("$.firstName").value("Jane"))
+            .andExpect(jsonPath("$.lastName").value("Doe"))
+            .andExpect(jsonPath("$.email").value("jane.doe@example.com"))
+            .andExpect(jsonPath("$.dateOfBirth").value("1994-02-14"));
+    }
+
+    @Test
+    @DisplayName("GET /students/{id} returns 404 when student missing")
+    void getStudentById_whenMissing_returnsNotFound() throws Exception {
+        long missingId = 9999L;
+
+        mockMvc.perform(get("/api/v1/students/{id}", missingId))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.status").value(404))
+            .andExpect(jsonPath("$.error").value("Not Found"))
+            .andExpect(jsonPath("$.message").value("Student not found with id: " + missingId))
+            .andExpect(jsonPath("$.path").value("/api/v1/students/" + missingId))
+            .andExpect(jsonPath("$.errors").doesNotExist())
+            .andExpect(jsonPath("$.timestamp").exists());
     }
 
     @Test
@@ -264,18 +337,16 @@ class StudentControllerIntegrationTest {
     @Test
     @DisplayName("POST /students returns 400 with validation errors for invalid payload")
     void createStudent_returnsBadRequestForInvalidData() throws Exception {
-        String requestBody = """
-            {
-              "firstName": "",
-              "lastName": "Doe",
-              "email": "not-an-email",
-              "dateOfBirth": null
-            }
-            """;
+        StudentPayload payload = new StudentPayload(
+            "",
+            "Doe",
+            "not-an-email",
+            null
+        );
 
         mockMvc.perform(post("/api/v1/students")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
+                .content(objectMapper.writeValueAsString(payload)))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.status").value(400))
             .andExpect(jsonPath("$.error").value("Bad Request"))
@@ -298,18 +369,16 @@ class StudentControllerIntegrationTest {
         ));
 
         String futureDate = LocalDate.now().plusDays(1).toString();
-        String updateBody = """
-            {
-              "firstName": "Mai",
-              "lastName": "Le",
-              "email": "mai.le@example.com",
-              "dateOfBirth": "%s"
-            }
-            """.formatted(futureDate);
+        StudentPayload updateBody = new StudentPayload(
+            "Mai",
+            "Le",
+            "mai.le@example.com",
+            LocalDate.parse(futureDate)
+        );
 
         mockMvc.perform(put("/api/v1/students/{id}", saved.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(updateBody))
+                .content(objectMapper.writeValueAsString(updateBody)))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.status").value(400))
             .andExpect(jsonPath("$.error").value("Bad Request"))
@@ -334,5 +403,28 @@ class StudentControllerIntegrationTest {
                 LocalDate.of(1990, 1, 1).plusDays(i)
             );
         });
+    }
+
+    private List<Student> seedDefaultStudents() {
+        return seedStudents(
+            new Student("Cathy", "Adams", "cathy.adams@example.com", LocalDate.of(1997, 4, 12)),
+            new Student("Brian", "Doe", "brian.doe@example.com", LocalDate.of(1996, 6, 22)),
+            new Student("Anna", "Smith", "anna.smith@example.com", LocalDate.of(1995, 2, 3))
+        );
+    }
+
+    private List<Student> seedStudents(Student... students) {
+        return Arrays.stream(students)
+            .map(studentRepository::save)
+            .toList();
+    }
+
+
+    private record StudentPayload(
+        String firstName,
+        String lastName,
+        String email,
+        LocalDate dateOfBirth
+    ) {
     }
 }
