@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import com.example.studentmanagement.exception.InvalidStudentDataException;
@@ -17,6 +18,7 @@ import com.example.studentmanagement.repository.StudentRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -34,9 +36,14 @@ class StudentServiceTest {
     private StudentService studentService;
 
     @Test
-    void studentServiceIsInitialisedWithMocks() {
+    void studentService_whenUsingInjectMocks_isInitialised() {
         // Verifies @InjectMocks wires the service under test with mocked dependencies.
         assertNotNull(studentService);
+    }
+
+    @AfterEach
+    void verifyMockInteractions() {
+        verifyNoMoreInteractions(studentRepository);
     }
 
     @Test
@@ -87,13 +94,21 @@ class StudentServiceTest {
 
     @Test
     void createStudent_whenPayloadValid_resetsIdentifierTrimsAndSaves() {
-        Student input = studentWithId(55L, "  Diana  ");
-        input.setLastName(" Prince ");
-        input.setEmail(" diana.prince@themyscira.org ");
+        Student input = studentBuilder()
+            .withId(55L)
+            .withFirstName("  Diana  ")
+            .withLastName(" Prince ")
+            .withEmail(" diana.prince@themyscira.org ")
+            .withDateOfBirth(LocalDate.of(1995, 5, 5))
+            .build();
 
-        Student saved = studentWithId(1L, "Diana");
-        saved.setLastName("Prince");
-        saved.setEmail("diana.prince@themyscira.org");
+        Student saved = studentBuilder()
+            .withId(1L)
+            .withFirstName("Diana")
+            .withLastName("Prince")
+            .withEmail("diana.prince@themyscira.org")
+            .withDateOfBirth(LocalDate.of(1995, 5, 5))
+            .build();
         when(studentRepository.save(any(Student.class))).thenReturn(saved);
 
         Student result = studentService.createStudent(input);
@@ -126,10 +141,13 @@ class StudentServiceTest {
     @Test
     void updateStudent_whenStudentExists_updatesFieldsAndSavesTrimmedData() {
         long studentId = 101L;
-        Student existing = studentWithId(studentId, "Old");
-        existing.setLastName("Value");
-        existing.setEmail("old.value@example.com");
-        existing.setDateOfBirth(LocalDate.of(1990, 1, 1));
+        Student existing = studentBuilder()
+            .withId(studentId)
+            .withFirstName("Old")
+            .withLastName("Value")
+            .withEmail("old.value@example.com")
+            .withDateOfBirth(LocalDate.of(1990, 1, 1))
+            .build();
 
         Student payload = new Student(
             "  New  ",
@@ -181,10 +199,13 @@ class StudentServiceTest {
     @Test
     void updateStudent_whenPayloadInvalid_throwsInvalidStudentDataException() {
         long studentId = 303L;
-        Student existing = studentWithId(studentId, "Existing");
-        existing.setLastName("Student");
-        existing.setEmail("existing.student@example.com");
-        existing.setDateOfBirth(LocalDate.of(1993, 8, 9));
+        Student existing = studentBuilder()
+            .withId(studentId)
+            .withFirstName("Existing")
+            .withLastName("Student")
+            .withEmail("existing.student@example.com")
+            .withDateOfBirth(LocalDate.of(1993, 8, 9))
+            .build();
 
         Student invalidPayload = new Student(
             " ",
@@ -203,7 +224,12 @@ class StudentServiceTest {
     @Test
     void deleteStudent_whenStudentExists_invokesDeleteById() {
         long studentId = 4040L;
-        Student existing = studentWithId(studentId, "Target");
+        Student existing = studentBuilder()
+            .withId(studentId)
+            .withFirstName("Target")
+            .withLastName("Student")
+            .withEmail("target.student@example.com")
+            .build();
         when(studentRepository.findById(studentId)).thenReturn(Optional.of(existing));
 
         studentService.deleteStudent(studentId);
@@ -223,14 +249,55 @@ class StudentServiceTest {
         verify(studentRepository, never()).deleteById(studentId);
     }
 
+    private TestStudentBuilder studentBuilder() {
+        return new TestStudentBuilder();
+    }
+
     private Student studentWithId(Long id, String firstName) {
-        Student student = new Student(
-            firstName,
-            "Nguyen",
-            firstName.toLowerCase() + "@example.com",
-            LocalDate.of(2000, 1, 1)
-        );
-        student.setId(id);
-        return student;
+        return studentBuilder()
+            .withId(id)
+            .withFirstName(firstName)
+            .withLastName("Nguyen")
+            .withEmail(firstName.toLowerCase() + "@example.com")
+            .build();
+    }
+
+    private static final class TestStudentBuilder {
+        private Long id;
+        private String firstName = "Alice";
+        private String lastName = "Nguyen";
+        private String email = "alice.nguyen@example.com";
+        private LocalDate dateOfBirth = LocalDate.of(2000, 1, 1);
+
+        private TestStudentBuilder withId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        private TestStudentBuilder withFirstName(String firstName) {
+            this.firstName = firstName;
+            return this;
+        }
+
+        private TestStudentBuilder withLastName(String lastName) {
+            this.lastName = lastName;
+            return this;
+        }
+
+        private TestStudentBuilder withEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        private TestStudentBuilder withDateOfBirth(LocalDate dateOfBirth) {
+            this.dateOfBirth = dateOfBirth;
+            return this;
+        }
+
+        private Student build() {
+            Student student = new Student(firstName, lastName, email, dateOfBirth);
+            student.setId(id);
+            return student;
+        }
     }
 }

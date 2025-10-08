@@ -45,9 +45,9 @@ Viết **unit test** cho các phương thức trong `StudentService` để kiể
 - [x] **deleteStudent** — *không tìm thấy*: ném `ResourceNotFoundException`.  
 
 ### Task 6: Bảo đảm chất lượng test
-- [ ] Kiểm tra **verifyNoMoreInteractions** với repository (khi cần).  
-- [ ] Đặt tên test **theo Given-When-Then** để dễ đọc.  
-- [ ] Tách **test data builder** (nếu cần) để tái sử dụng dữ liệu mẫu.  
+- [x] Kiểm tra **verifyNoMoreInteractions** với repository (khi cần).  
+- [x] Đặt tên test **theo Given-When-Then** để dễ đọc.  
+- [x] Tách **test data builder** (nếu cần) để tái sử dụng dữ liệu mẫu.  
 
 ---
 
