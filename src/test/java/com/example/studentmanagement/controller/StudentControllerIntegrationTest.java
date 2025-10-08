@@ -12,7 +12,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.studentmanagement.model.Student;
 import com.example.studentmanagement.repository.StudentRepository;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.IntStream;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,6 +37,11 @@ class StudentControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        studentRepository.deleteAll();
+    }
+
+    @AfterEach
+    void tearDown() {
         studentRepository.deleteAll();
     }
 
@@ -62,9 +70,7 @@ class StudentControllerIntegrationTest {
     @Test
     @DisplayName("GET /students returns paged payload with metadata")
     void getStudents_returnsPagedResponse() throws Exception {
-        saveStudent("Cathy", "Adams", "cathy.adams@example.com", LocalDate.of(1997, 4, 12));
-        saveStudent("Brian", "Doe", "brian.doe@example.com", LocalDate.of(1996, 6, 22));
-        saveStudent("Anna", "Smith", "anna.smith@example.com", LocalDate.of(1995, 2, 3));
+        seedDefaultStudents();
 
         mockMvc.perform(get("/api/v1/students")
                 .param("page", "0")
@@ -334,5 +340,19 @@ class StudentControllerIntegrationTest {
                 LocalDate.of(1990, 1, 1).plusDays(i)
             );
         });
+    }
+
+    private List<Student> seedDefaultStudents() {
+        return seedStudents(
+            new Student("Cathy", "Adams", "cathy.adams@example.com", LocalDate.of(1997, 4, 12)),
+            new Student("Brian", "Doe", "brian.doe@example.com", LocalDate.of(1996, 6, 22)),
+            new Student("Anna", "Smith", "anna.smith@example.com", LocalDate.of(1995, 2, 3))
+        );
+    }
+
+    private List<Student> seedStudents(Student... students) {
+        return Arrays.stream(students)
+            .map(studentRepository::save)
+            .toList();
     }
 }

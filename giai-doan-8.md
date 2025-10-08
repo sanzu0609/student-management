@@ -23,8 +23,8 @@ Viết **integration test** kiểm tra toàn bộ luồng từ **Controller → 
 - [x] Đảm bảo H2 được sử dụng cho test (mặc định phù hợp; có thể tạo `application-test.properties` nếu muốn).  
 
 ### Task 2: Dữ liệu khởi tạo (tuỳ chọn)
-- [ ] Seed sẵn một vài bản ghi (Flyway migration / SQL script / test setup) để test `GET`/`PUT`/`DELETE`.  
-- [ ] Xoá/đặt lại dữ liệu trước mỗi test (nếu cần) để tests **độc lập**.  
+- [x] Seed sẵn một vài bản ghi (Flyway migration / SQL script / test setup) để test `GET`/`PUT`/`DELETE`.  
+- [x] Xoá/đặt lại dữ liệu trước mỗi test (nếu cần) để tests **độc lập**.  
 
 ### Task 3: Test GET danh sách
 - [ ] Gọi `GET /api/v1/students`.  
