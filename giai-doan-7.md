@@ -31,9 +31,9 @@ Viết **unit test** cho các phương thức trong `StudentService` để kiể
 - [x] **getStudentById** — *không tìm thấy*: ném exception phù hợp (ví dụ `ResourceNotFoundException`).  
 
 ### Task 3: Viết test cho chức năng tạo
-- [ ] **createStudent** — happy path: trả về đối tượng đã tạo với thuộc tính hợp lệ.  
-- [ ] **createStudent** — business rule (nếu có): ví dụ trùng email → ném lỗi.  
-- [ ] **verify()** các tương tác với repository (`save()`, `existsBy...()`).  
+- [x] **createStudent** — happy path: trả về đối tượng đã tạo với thuộc tính hợp lệ.  
+- [x] **createStudent** — business rule (nếu có): ví dụ trùng email → ném lỗi.  
+- [x] **verify()** các tương tác với repository (`save()`, `existsBy...()`).  
 
 ### Task 4: Viết test cho chức năng cập nhật
 - [ ] **updateStudent** — *tìm thấy*: cập nhật thành công, giá trị mới đúng.  

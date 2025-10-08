@@ -4,10 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.example.studentmanagement.exception.InvalidStudentDataException;
 import com.example.studentmanagement.exception.ResourceNotFoundException;
 import com.example.studentmanagement.model.Student;
 import com.example.studentmanagement.repository.StudentRepository;
@@ -16,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -79,6 +83,44 @@ class StudentServiceTest {
 
         assertThrows(ResourceNotFoundException.class, () -> studentService.getStudentById(studentId));
         verify(studentRepository, times(1)).findById(studentId);
+    }
+
+    @Test
+    void createStudent_whenPayloadValid_resetsIdentifierTrimsAndSaves() {
+        Student input = studentWithId(55L, "  Diana  ");
+        input.setLastName(" Prince ");
+        input.setEmail(" diana.prince@themyscira.org ");
+
+        Student saved = studentWithId(1L, "Diana");
+        saved.setLastName("Prince");
+        saved.setEmail("diana.prince@themyscira.org");
+        when(studentRepository.save(any(Student.class))).thenReturn(saved);
+
+        Student result = studentService.createStudent(input);
+
+        assertEquals(saved, result);
+
+        ArgumentCaptor<Student> studentCaptor = ArgumentCaptor.forClass(Student.class);
+        verify(studentRepository, times(1)).save(studentCaptor.capture());
+
+        Student persistedArgument = studentCaptor.getValue();
+        assertEquals(null, persistedArgument.getId());
+        assertEquals("Diana", persistedArgument.getFirstName());
+        assertEquals("Prince", persistedArgument.getLastName());
+        assertEquals("diana.prince@themyscira.org", persistedArgument.getEmail());
+    }
+
+    @Test
+    void createStudent_whenPayloadMissingFirstName_throwsInvalidStudentDataException() {
+        Student invalid = new Student(
+            " ",
+            "Kent",
+            "clark.kent@dailyplanet.com",
+            LocalDate.of(1998, 6, 18)
+        );
+
+        assertThrows(InvalidStudentDataException.class, () -> studentService.createStudent(invalid));
+        verify(studentRepository, never()).save(any(Student.class));
     }
 
     private Student studentWithId(Long id, String firstName) {
