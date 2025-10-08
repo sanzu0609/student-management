@@ -21,9 +21,9 @@ Viết **unit test** cho các phương thức trong `StudentService` để kiể
 ## 📂 Tasks
 
 ### Task 1: Chuẩn bị lớp test và cấu hình Mockito
-- [ ] Tạo class `StudentServiceTest`.  
-- [ ] Áp dụng JUnit 5 + Mockito (annotation gợi ý): `@ExtendWith(MockitoExtension.class)`, `@Mock`, `@InjectMocks`.  
-- [ ] Khởi tạo `StudentService` với `StudentRepository` đã mock.  
+- [x] Tạo class `StudentServiceTest`.  
+- [x] Áp dụng JUnit 5 + Mockito (annotation gợi ý): `@ExtendWith(MockitoExtension.class)`, `@Mock`, `@InjectMocks`.  
+- [x] Khởi tạo `StudentService` với `StudentRepository` đã mock.  
 
 ### Task 2: Viết test cho chức năng đọc
 - [ ] **getAllStudents**: trả về danh sách đúng số lượng/phần tử.  
